@@ -552,8 +552,7 @@
             ctaButtons.forEach(button => {
                 if (button.textContent.includes('Começar') || button.textContent.includes('Renovar') || button.textContent.includes('Escolher')) {
                     button.addEventListener('click', function() {
-                        // In a real application, this would redirect to a form or checkout
-                        alert('Redirecionando para o formulário de renovação...');
+                        window.open('https://forms.gle/dSvcWisMaMYQ16am8', '_blank');
                     });
                 }
             });
