@@ -6,7 +6,7 @@
     <title>Renovar Receita Médica Online - Rápido e Seguro</title>
     <meta name="description" content="Renove sua receita médica de ansiedade sem sair de casa. Processo 100% online, seguro e regulamentado. Economize tempo e dinheiro.">
     <meta name="keywords" content="renovar receita médica online, receita médica ansiedade, telemedicina, consulta online">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://receitaonline.com.br/">
@@ -23,7 +23,7 @@
 
     <link rel="canonical" href="https://receitaonline.com.br/">
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Critical CSS for above-the-fold content -->
     <style>
         /* Custom focus styles for accessibility */
@@ -31,12 +31,12 @@
             outline: 2px solid #3B82F6;
             outline-offset: 2px;
         }
-        
+
         /* Hero section optimized styles */
         .hero-bg {
-            background: linear-gradient(135deg, #EEF2FF 0%, #E0F2FE 100%);
+            background: linear-gradient(to bottom right, hsl(35 60% 95%), hsl(0 0% 100%), #b1c4ec);
         }
-        
+
         /* Smooth scroll behavior */
         html {
             scroll-behavior: smooth;
@@ -112,7 +112,8 @@
                     <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                         <path fill-rule="evenodd" d="M10 2C5.58 2 2 5.58 2 10s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm3.5 6L10 10.5 6.5 8 10 5.5 13.5 8z" clip-rule="evenodd"/>
                     </svg>
-                    <span class="text-xl font-bold text-gray-900">ReceitaOnline</span>
+                    <!-- <img src="drmente-logo.svg" alt="DrMente" class="w-8 h-8"> -->
+                    <span class="text-xl font-bold text-gray-900">DrMente</span>
                 </div>
                 <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors focus-visible" aria-label="Começar renovação">
                     Começar Agora
@@ -125,7 +126,7 @@
     <section class="hero-bg pt-20 pb-16" role="banner">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-4xl mx-auto">
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 mt-10 leading-tight">
                     Renove sua receita médica sem sair de casa
                 </h1>
                 <p class="text-xl sm:text-2xl text-gray-700 mb-8 max-w-2xl mx-auto">
@@ -145,26 +146,27 @@
     <section class="py-16 bg-white" aria-labelledby="social-proof-heading">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 id="social-proof-heading" class="text-3xl font-bold text-center text-gray-900 mb-12">
-                Mais de 10.000 pessoas já renovaram suas receitas
+                <!-- Mais de 10.000 pessoas já renovaram suas receitas -->
+                 O que as pessoas estão dizendo:
             </h2>
             <div class="grid md:grid-cols-3 gap-8">
                 <div class="text-center">
                     <div class="bg-gray-100 rounded-lg p-6 mb-4">
-                        <p class="text-gray-700 italic">"Recebi minha receita em 18 horas. Muito prático!"</p>
+                        <p class="text-gray-700 italic">"O atendimento foi espetacular, recebi minha receita em 6 horas. Muito prático!"</p>
                     </div>
-                    <p class="font-semibold">Maria S., São Paulo</p>
+                    <p class="font-semibold">Eduardo A., Niterói - RJ</p>
                 </div>
                 <div class="text-center">
                     <div class="bg-gray-100 rounded-lg p-6 mb-4">
-                        <p class="text-gray-700 italic">"Economizei R$ 300 em consulta. Recomendo!"</p>
+                        <p class="text-gray-700 italic">"Já economizei R$ 600 em consultas em apenas 6 meses. Recomendo!"</p>
                     </div>
-                    <p class="font-semibold">João M., Rio de Janeiro</p>
+                    <p class="font-semibold">Carla M., Salvador - BA</p>
                 </div>
                 <div class="text-center">
                     <div class="bg-gray-100 rounded-lg p-6 mb-4">
-                        <p class="text-gray-700 italic">"Processo simples e médicos qualificados."</p>
+                        <p class="text-gray-700 italic">"A plataforma é muito simples de usar e os médicos são muito profissionais."</p>
                     </div>
-                    <p class="font-semibold">Ana P., Belo Horizonte</p>
+                    <p class="font-semibold">Jorge L., Belo Horizonte - MG</p>
                 </div>
             </div>
         </div>
@@ -600,5 +602,7 @@
             });
         }
     </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <!-- Gradiente dourado -->
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E6C768"/>
+      <stop offset="60%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#F8E7A1"/>
+    </linearGradient>
+    <style>
+      .goldFill { fill: url(#gold); }
+      .goldStroke { stroke: url(#gold); stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <!-- contorno simplificado do cérebro -->
+  <path d="M126,252
+           C80,245 42,205 36,165
+           C30,127 43,92 66,72
+           C85,56 113,48 140,54
+           C160,33 192,26 219,36
+           C246,18 287,24 311,46
+           C345,43 374,58 391,86
+           C414,121 409,168 386,197
+           C389,219 383,243 368,258
+           C347,279 316,283 291,274
+           C268,296 231,302 206,290
+           C186,305 156,305 137,289
+           C128,281 123,267 126,252Z"
+        fill="none" class="goldStroke" stroke-width="3"/>
+
+  <!-- conexões principais -->
+  <g class="goldStroke" fill="none" stroke-width="2.2">
+    <path d="M90,170 L140,140 L190,150 L235,120 L280,135 L330,120 L365,160 L330,200 L280,185 L230,205 L190,175 L140,200 Z"/>
+    <path d="M120,110 L160,90 L205,105 L245,80 L290,95 L330,90"/>
+    <path d="M150,230 L190,175 L230,205 L270,230 L310,210"/>
+    <path d="M200,150 L205,105 L230,205"/>
+    <path d="M280,135 L280,185 L310,210 L365,160"/>
+    <path d="M140,140 L120,110 L90,170"/>
+  </g>
+
+  <!-- nós (pontos) -->
+  <g class="goldFill">
+    <!-- linha superior -->
+    <circle cx="120" cy="110" r="6"/>
+    <circle cx="160" cy="90" r="5"/>
+    <circle cx="205" cy="105" r="5"/>
+    <circle cx="245" cy="80" r="5"/>
+    <circle cx="290" cy="95" r="5"/>
+    <circle cx="330" cy="90" r="6"/>
+
+    <!-- linha média -->
+    <circle cx="140" cy="140" r="6"/>
+    <circle cx="190" cy="150" r="5"/>
+    <circle cx="235" cy="120" r="5"/>
+    <circle cx="280" cy="135" r="5"/>
+    <circle cx="330" cy="120" r="5"/>
+    <circle cx="365" cy="160" r="6"/>
+
+    <!-- linha inferior -->
+    <circle cx="150" cy="230" r="6"/>
+    <circle cx="190" cy="175" r="5"/>
+    <circle cx="230" cy="205" r="5"/>
+    <circle cx="270" cy="230" r="5"/>
+    <circle cx="310" cy="210" r="5"/>
+    <circle cx="330" cy="200" r="5"/>
+    <circle cx="280" cy="185" r="5"/>
+    <circle cx="230" cy="205" r="5"/>
+    <circle cx="190" cy="175" r="5"/>
+    <circle cx="140" cy="200" r="5"/>
+    <circle cx="90" cy="170" r="6"/>
+  </g>
+</svg>
