@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Renove sua receita médica online | Renovação rápida</title>
+  <meta name="description" content="Renove sua receita médica online em minutos. Processo seguro, médico responsável, sem sair de casa. Para quem já tem diagnóstico de ansiedade." />
+  <meta name="keywords" content="renovar receita médica online, receita médica ansiedade, telemedicina receita, renovar receita remédio" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Renove sua receita médica online" />
+  <meta property="og:description" content="Receba uma nova receita para ansiedade em minutos. Processo seguro e acessível." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://exemplo.com" />
+  <meta property="og:image" content="https://exemplo.com/og.jpg" />
+  <meta property="og:locale" content="pt_BR" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Renove sua receita médica online" />
+  <meta name="twitter:description" content="Nova receita para ansiedade em minutos. Seguro e acessível." />
+  <meta name="twitter:image" content="https://exemplo.com/og.jpg" />
+
+  <!-- Tailwind CSS via CDN (no build step as requested) -->
+  <script src="https://cdn.tailwindcss.com" defer></script>
+
+  <!-- Critical CSS: tiny boost for above-the-fold (keep minimal for performance) -->
+  <style>
+    /* Keep contrast high and focus visible */
+    :root { color-scheme: light; }
+    html { scroll-behavior: smooth; }
+    /* Reserve space to avoid CLS on hero */
+    .hero-wrap { min-height: 86vh; }
+    /* Ensure custom focus ring if user agent lacks it */
+    a:focus-visible, button:focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; }
+  </style>
+
+  <!-- JSON-LD FAQ Schema (SEO) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Quem pode usar o serviço?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Pessoas com diagnóstico prévio de ansiedade que precisam renovar a receita."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Em quanto tempo recebo a receita?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Na maioria dos casos, em poucas horas, após revisão médica responsável."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Preciso fazer nova consulta completa?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Não. Você envia seu histórico e comprovantes. O médico avalia e emite a receita quando adequado."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "É legal e válido nas farmácias?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sim. A receita eletrônica com assinatura digital é válida conforme normas brasileiras."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Como vocês protegem meus dados?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Usamos criptografia e controles de acesso. Seus dados são tratados conforme a LGPD."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "E se o médico não aprovar?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Você recebe orientação clara sobre próximos passos. Reembolsos seguem nossa política."
+        }
+      }
+    ]
+  }
+  </script>
+  <!-- ANALYTICS: add script here -->
+</head>
+<body class="antialiased text-slate-900 bg-white">
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:bg-white focus:px-3 focus:py-2 focus:rounded">Pular para o conteúdo</a>
+
+  <!-- Header / Nav -->
+  <header class="w-full border-b border-slate-200 bg-white sticky top-0 z-30" role="banner">
+    <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between" aria-label="Principal">
+      <a href="#" class="flex items-center gap-2" aria-label="Página inicial">
+        <!-- Simple inline SVG logo with good contrast -->
+        <svg class="h-8 w-8" viewBox="0 0 24 24" role="img" aria-label="Logotipo: cruz médica" xmlns="http://www.w3.org/2000/svg">
+          <title>Logotipo</title>
+          <rect x="3" y="3" width="18" height="18" rx="4" fill="#1d4ed8"></rect>
+          <path d="M12 7v10M7 12h10" stroke="white" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        <span class="font-semibold tracking-tight">ReceitaJá</span>
+      </a>
+      <div class="hidden md:flex items-center gap-6">
+        <a href="#benefits" class="hover:underline">Benefícios</a>
+        <a href="#how" class="hover:underline">Como funciona</a>
+        <a href="#pricing" class="hover:underline">Preços</a>
+        <a href="#faq" class="hover:underline">FAQ</a>
+      </div>
+      <div class="flex items-center">
+        <a href="#pricing" class="rounded-lg bg-blue-700 text-white px-4 py-2 text-sm font-semibold focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300" aria-label="Ir para preços e iniciar">Começar agora</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <main id="main" role="main">
+    <section class="hero-wrap bg-gradient-to-b from-white to-slate-50">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-14 pb-10 grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900">
+            Renove sua receita médica sem sair de casa
+          </h1>
+          <p class="mt-4 text-lg text-slate-700 max-w-prose">
+            Receba uma nova receita para ansiedade em minutos. Processo seguro e acessível, com médico responsável.
+          </p>
+          <div class="mt-8">
+            <a href="#pricing" class="inline-flex items-center rounded-xl bg-blue-700 px-6 py-3 text-white font-semibold shadow-sm hover:bg-blue-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300" aria-label="Começar agora na seção de preços">Começar agora</a>
+          </div>
+          <!-- Trust badges near CTA for reassurance (above the fold) -->
+          <div class="mt-6 flex items-center gap-4 text-sm text-slate-600" aria-label="Selos de confiança">
+            <div class="flex items-center gap-2">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" role="img" aria-label="Cadeado de segurança" xmlns="http://www.w3.org/2000/svg">
+                <title>Dados protegidos</title>
+                <path d="M6 10h12v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-9z" fill="#0f172a"/>
+                <path d="M8 10V7a4 4 0 1 1 8 0v3" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <span>Dados protegidos • LGPD</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" role="img" aria-label="Selo médico" xmlns="http://www.w3.org/2000/svg">
+                <title>Conformidade médica</title>
+                <circle cx="12" cy="12" r="10" fill="#0f172a"/>
+                <path d="M8 12h8M12 8v8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <span>Receita eletrônica com assinatura digital</span>
+            </div>
+          </div>
+        </div>
+        <!-- Hero illustration: accessible inline SVG (no heavy image to keep perf high) -->
+        <div class="relative">
+          <svg class="w-full h-auto" viewBox="0 0 600 420" role="img" aria-label="Ilustração: paciente no sofá usando celular para renovar receita" xmlns="http://www.w3.org/2000/svg">
+            <title>Renovação online, do sofá</title>
+            <rect x="20" y="40" width="560" height="340" rx="24" fill="#e2e8f0"/>
+            <rect x="60" y="80" width="240" height="280" rx="16" fill="#94a3b8"/>
+            <rect x="320" y="100" width="220" height="40" rx="8" fill="#1d4ed8"/>
+            <rect x="320" y="160" width="220" height="18" rx="4" fill="#334155"/>
+            <rect x="320" y="190" width="220" height="18" rx="4" fill="#334155"/>
+            <rect x="320" y="220" width="160" height="18" rx="4" fill="#334155"/>
+            <rect x="320" y="260" width="120" height="40" rx="10" fill="#1d4ed8"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section id="social" aria-labelledby="social-heading" class="py-12 border-t border-slate-200">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h2 id="social-heading" class="text-sm uppercase tracking-wider text-slate-600">Visto em</h2>
+        <div class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-6 items-center">
+          <!-- Logo placeholders using SVG for crispness and alt text -->
+          <figure class="flex items-center justify-center">
+            <svg class="h-8" viewBox="0 0 120 24" role="img" aria-label="Logo Saúde+">
+              <title>Saúde+</title><rect width="120" height="24" fill="#0f172a"/><text x="10" y="16" font-size="12" fill="white">Saúde+</text>
+            </svg>
+          </figure>
+          <figure class="flex items-center justify-center">
+            <svg class="h-8" viewBox="0 0 120 24" role="img" aria-label="Logo BemEstar">
+              <title>BemEstar</title><rect width="120" height="24" fill="#0f172a"/><text x="10" y="16" font-size="12" fill="white">BemEstar</text>
+            </svg>
+          </figure>
+          <figure class="flex items-center justify-center">
+            <svg class="h-8" viewBox="0 0 120 24" role="img" aria-label="Logo Viva+">
+              <title>Viva+</title><rect width="120" height="24" fill="#0f172a"/><text x="10" y="16" font-size="12" fill="white">Viva+</text>
+            </svg>
+          </figure>
+          <figure class="flex items-center justify-center">
+            <svg class="h-8" viewBox="0 0 120 24" role="img" aria-label="Logo Dia a Dia">
+              <title>Dia a Dia</title><rect width="120" height="24" fill="#0f172a"/><text x="10" y="16" font-size="12" fill="white">Dia a Dia</text>
+            </svg>
+          </figure>
+        </div>
+        <div class="mt-6 grid sm:grid-cols-3 gap-6 text-slate-700">
+          <blockquote class="p-4 rounded-lg bg-slate-50 border border-slate-200">“Resolvi meu problema em uma tarde.” — Carla S.</blockquote>
+          <blockquote class="p-4 rounded-lg bg-slate-50 border border-slate-200">“Preço justo e processo claro.” — João M.</blockquote>
+          <blockquote class="p-4 rounded-lg bg-slate-50 border border-slate-200">“Receita válida em farmácia perto.” — Beatriz L.</blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- Benefits -->
+    <section id="benefits" aria-labelledby="benefits-heading" class="py-16">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h2 id="benefits-heading" class="text-3xl font-bold tracking-tight">Benefícios que você sente hoje</h2>
+        <p class="mt-2 text-slate-700 max-w-2xl">Sem fila, sem sustos no preço, sem sair de casa.</p>
+        <div class="mt-10 grid sm:grid-cols-3 gap-6">
+          <div class="p-6 border border-slate-200 rounded-2xl bg-white shadow-sm">
+            <h3 class="font-semibold text-xl">Receba rápido</h3>
+            <p class="mt-2 text-slate-700">Envie seus documentos e receba a receita em poucas horas.</p>
+          </div>
+          <div class="p-6 border border-slate-200 rounded-2xl bg-white shadow-sm">
+            <h3 class="font-semibold text-xl">Pague menos</h3>
+            <p class="mt-2 text-slate-700">Renove sem o custo de uma consulta completa.</p>
+          </div>
+          <div class="p-6 border border-slate-200 rounded-2xl bg-white shadow-sm">
+            <h3 class="font-semibold text-xl">Zero deslocamento</h3>
+            <p class="mt-2 text-slate-700">Faça tudo pelo celular, com total segurança.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how" aria-labelledby="how-heading" class="py-16 bg-slate-50 border-y border-slate-200">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h2 id="how-heading" class="text-3xl font-bold tracking-tight">Como funciona</h2>
+        <div class="mt-10 grid sm:grid-cols-3 gap-8">
+          <div class="flex items-start gap-4">
+            <div aria-hidden="true" class="shrink-0">
+              <svg class="h-10 w-10" viewBox="0 0 24 24" role="img" aria-label="Passo 1: envio" xmlns="http://www.w3.org/2000/svg">
+                <title>Envie seus dados</title>
+                <circle cx="12" cy="12" r="10" fill="#1d4ed8"/><path d="M7 12l3 3 7-7" stroke="white" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-lg">Envie seus dados</h3>
+              <p class="text-slate-700">Preencha o formulário e anexe laudos e receitas antigas.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div aria-hidden="true" class="shrink-0">
+              <svg class="h-10 w-10" viewBox="0 0 24 24" role="img" aria-label="Passo 2: avaliação" xmlns="http://www.w3.org/2000/svg">
+                <title>Avaliação médica</title>
+                <rect x="4" y="4" width="16" height="16" rx="3" fill="#0f172a"/><path d="M8 12h8M12 8v8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-lg">Avaliação médica</h3>
+              <p class="text-slate-700">Um médico revisa seu histórico e valida a prescrição.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div aria-hidden="true" class="shrink-0">
+              <svg class="h-10 w-10" viewBox="0 0 24 24" role="img" aria-label="Passo 3: receita" xmlns="http://www.w3.org/2000/svg">
+                <title>Receba a receita</title>
+                <path d="M6 3h9l3 3v15H6z" fill="#1d4ed8"/><path d="M9 12h6M9 16h4" stroke="white" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-lg">Receba a receita</h3>
+              <p class="text-slate-700">Receita eletrônica assinada digitalmente no seu e-mail.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature Deep-Dive -->
+    <section id="features" aria-labelledby="features-heading" class="py-16">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h2 id="features-heading" class="text-3xl font-bold tracking-tight">Recursos que dão tranquilidade</h2>
+        <div class="mt-10 grid md:grid-cols-3 gap-8">
+          <article class="p-6 border border-slate-200 rounded-2xl">
+            <div class="flex items-center gap-3">
+              <svg class="h-8 w-8" viewBox="0 0 24 24" role="img" aria-label="Assinatura digital" xmlns="http://www.w3.org/2000/svg">
+                <title>Assinatura digital</title>
+                <circle cx="12" cy="12" r="10" fill="#1d4ed8"/><path d="M7 13l3 3 7-7" stroke="white" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <h3 class="font-semibold text-lg">Assinatura digital qualificada</h3>
+            </div>
+            <p class="mt-2 text-slate-700">Receitas com validade nacional e verificação fácil na farmácia.</p>
+          </article>
+          <article class="p-6 border border-slate-200 rounded-2xl">
+            <div class="flex items-center gap-3">
+              <svg class="h-8 w-8" viewBox="0 0 24 24" role="img" aria-label="Privacidade" xmlns="http://www.w3.org/2000/svg">
+                <title>Privacidade</title>
+                <rect x="4" y="7" width="16" height="13" rx="2" fill="#0f172a"/><path d="M8 10V7a4 4 0 1 1 8 0v3" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+              </svg>
+              <h3 class="font-semibold text-lg">Privacidade por padrão</h3>
+            </div>
+            <p class="mt-2 text-slate-700">Criptografia e acesso mínimo. Você controla seus dados.</p>
+          </article>
+          <article class="p-6 border border-slate-200 rounded-2xl">
+            <div class="flex items-center gap-3">
+              <svg class="h-8 w-8" viewBox="0 0 24 24" role="img" aria-label="Suporte humano" xmlns="http://www.w3.org/2000/svg">
+                <title>Suporte humano</title>
+                <circle cx="12" cy="8" r="3" fill="#1d4ed8"/><path d="M4 20a8 8 0 0 1 16 0" fill="#0f172a"/>
+              </svg>
+              <h3 class="font-semibold text-lg">Suporte que acolhe</h3>
+            </div>
+            <p class="mt-2 text-slate-700">Equipe treinada para orientar com empatia e clareza.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" aria-labelledby="pricing-heading" class="py-16 bg-slate-50 border-y border-slate-200">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h2 id="pricing-heading" class="text-3xl font-bold tracking-tight">Escolha o plano ideal</h2>
+        <p class="mt-2 text-slate-700">Sem mensalidade obrigatória. Pague só quando precisar.</p>
+        <div class="mt-10 grid md:grid-cols-3 gap-6">
+          <!-- Plano 1 -->
+          <div class="flex flex-col rounded-2xl border border-slate-200 bg-white p-6">
+            <h3 class="text-xl font-semibold">Essencial</h3>
+            <p class="mt-1 text-slate-700">Para renovação sem pressa.</p>
+            <p class="mt-6 text-3xl font-extrabold">R$ 79</p>
+            <ul class="mt-4 space-y-2 text-slate-700">
+              <li>• Avaliação médica em até 24h</li>
+              <li>• Receita eletrônica válida</li>
+              <li>• Suporte por e-mail</li>
+            </ul>
+            <a href="#cta-start" class="mt-6 inline-flex justify-center rounded-lg bg-blue-700 px-4 py-2 text-white font-semibold hover:bg-blue-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300" aria-label="Selecionar plano Essencial">Começar agora</a>
+          </div>
+          <!-- Plano 2 (destaque) -->
+          <div class="flex flex-col rounded-2xl border-2 border-blue-700 bg-white p-6 shadow-lg" aria-label="Plano recomendado">
+            <div class="inline-block self-start rounded-full bg-blue-700 text-white text-xs px-2 py-1">Mais escolhido</div>
+            <h3 class="mt-2 text-xl font-semibold">Expresso</h3>
+            <p class="mt-1 text-slate-700">Quando o remédio acabou.</p>
+            <p class="mt-6 text-3xl font-extrabold">R$ 119</p>
+            <ul class="mt-4 space-y-2 text-slate-700">
+              <li>• Prioridade na fila</li>
+              <li>• Entrega média em 6h</li>
+              <li>• Suporte chat e e-mail</li>
+            </ul>
+            <a href="#cta-start" class="mt-6 inline-flex justify-center rounded-lg bg-blue-700 px-4 py-2 text-white font-semibold hover:bg-blue-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300" aria-label="Selecionar plano Expresso">Começar agora</a>
+          </div>
+          <!-- Plano 3 -->
+          <div class="flex flex-col rounded-2xl border border-slate-200 bg-white p-6">
+            <h3 class="text-xl font-semibold">Continuado</h3>
+            <p class="mt-1 text-slate-700">Para quem renova com frequência.</p>
+            <p class="mt-6 text-3xl font-extrabold">R$ 199</p>
+            <ul class="mt-4 space-y-2 text-slate-700">
+              <li>• 2 renovações no mês</li>
+              <li>• Atendimento priorizado</li>
+              <li>• Suporte dedicado</li>
+            </ul>
+            <a href="#cta-start" class="mt-6 inline-flex justify-center rounded-lg bg-blue-700 px-4 py-2 text-white font-semibold hover:bg-blue-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300" aria-label="Selecionar plano Continuado">Começar agora</a>
+          </div>
+        </div>
+        <!-- Anchor for CTAs -->
+        <div id="cta-start" class="sr-only" aria-hidden="true">Início do fluxo</div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" aria-labelledby="faq-heading" class="py-16">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h2 id="faq-heading" class="text-3xl font-bold tracking-tight">Perguntas frequentes</h2>
+        <div class="mt-8 grid md:grid-cols-2 gap-8">
+          <details class="group border border-slate-200 rounded-xl p-4">
+            <summary class="cursor-pointer font-semibold focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300 rounded">Quem pode usar o serviço?</summary>
+            <p class="mt-2 text-slate-700">Quem já tem diagnóstico de ansiedade e precisa renovar a receita.</p>
+          </details>
+          <details class="group border border-slate-200 rounded-xl p-4">
+            <summary class="cursor-pointer font-semibold focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300 rounded">Em quanto tempo recebo?</summary>
+            <p class="mt-2 text-slate-700">Geralmente em poucas horas, conforme triagem e disponibilidade médica.</p>
+          </details>
+          <details class="group border border-slate-200 rounded-xl p-4">
+            <summary class="cursor-pointer font-semibold focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300 rounded">O médico pode recusar?</summary>
+            <p class="mt-2 text-slate-700">Sim, quando não for adequado ou seguro. Você recebe orientação clara.</p>
+          </details>
+          <details class="group border border-slate-200 rounded-xl p-4">
+            <summary class="cursor-pointer font-semibold focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300 rounded">A receita vale em farmácias?</summary>
+            <p class="mt-2 text-slate-700">Sim. É receita eletrônica com assinatura digital e validade nacional.</p>
+          </details>
+          <details class="group border border-slate-200 rounded-xl p-4">
+            <summary class="cursor-pointer font-semibold focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300 rounded">Quais documentos enviar?</summary>
+            <p class="mt-2 text-slate-700">Documento com foto, receita anterior e laudo/relatório do diagnóstico.</p>
+          </details>
+          <details class="group border border-slate-200 rounded-xl p-4">
+            <summary class="cursor-pointer font-semibold focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300 rounded">Como protegem meus dados?</summary>
+            <p class="mt-2 text-slate-700">Usamos criptografia, logs e controles de acesso, conforme a LGPD.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust / Compliance -->
+    <section id="trust" aria-labelledby="trust-heading" class="py-12 bg-slate-50 border-y border-slate-200">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h2 id="trust-heading" class="text-3xl font-bold tracking-tight">Conformidade e responsabilidade</h2>
+        <div class="mt-6 grid md:grid-cols-3 gap-6">
+          <div class="flex items-start gap-3">
+            <svg class="h-8 w-8" viewBox="0 0 24 24" role="img" aria-label="Normas brasileiras" xmlns="http://www.w3.org/2000/svg">
+              <title>Normas</title><circle cx="12" cy="12" r="10" fill="#0f172a"/><path d="M8 12l2 2 6-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <p class="text-slate-700">Seguimos normas brasileiras de prescrição eletrônica.</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <svg class="h-8 w-8" viewBox="0 0 24 24" role="img" aria-label="LGPD" xmlns="http://www.w3.org/2000/svg">
+              <title>LGPD</title><rect x="4" y="4" width="16" height="16" rx="4" fill="#1d4ed8"/><path d="M8 12h8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <p class="text-slate-700">Tratamento de dados conforme LGPD e boas práticas.</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <svg class="h-8 w-8" viewBox="0 0 24 24" role="img" aria-label="Auditoria" xmlns="http://www.w3.org/2000/svg">
+              <title>Auditoria</title><path d="M4 18V6l8-3 8 3v12l-8 3-8-3z" fill="#0f172a"/><path d="M8 12h8M8 15h6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <p class="text-slate-700">Registros e auditoria clínica para segurança do paciente.</p>
+          </div>
+        </div>
+        <!-- Short disclaimer -->
+        <p class="mt-6 text-sm text-slate-600">
+          Aviso: este serviço é exclusivo para renovação de receitas de ansiedade já diagnosticada. A avaliação é individual. Quando não adequado, não emitimos a receita e orientamos próximos passos.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-10" role="contentinfo">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <svg class="h-6 w-6" viewBox="0 0 24 24" role="img" aria-label="Logotipo pequeno" xmlns="http://www.w3.org/2000/svg">
+            <title>ReceitaJá</title><rect x="3" y="3" width="18" height="18" rx="4" fill="#1d4ed8"/><path d="M12 7v10M7 12h10" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="font-semibold">ReceitaJá</span>
+        </div>
+        <nav aria-label="Rodapé">
+          <ul class="flex flex-wrap gap-6">
+            <li><a class="hover:underline" href="/privacy" aria-label="Ir para Política de Privacidade">Privacy</a></li>
+            <li><a class="hover:underline" href="/terms" aria-label="Ir para Termos de Uso">Terms</a></li>
+            <li><a class="hover:underline" href="/contact" aria-label="Ir para Contato">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+      <p class="mt-4 text-sm text-slate-600">© <span id="year">2025</span> ReceitaJá. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- Non-critical JS deferred for performance -->
+  <script defer>
+    // Update year; minor enhancement (deferred to avoid main-thread cost)
+    document.addEventListener('DOMContentLoaded', function () {
+      const y = document.getElementById('year');
+      if (y) y.textContent = new Date().getFullYear();
+
+      // Simple, accessible smooth-scroll focus management
+      document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+        a.addEventListener('click', function (e) {
+          const id = a.getAttribute('href').slice(1);
+          const target = document.getElementById(id);
+          if (target) {
+            // Let native smooth scroll run (html { scroll-behavior: smooth })
+            // Move focus for a11y after scroll
+            setTimeout(function(){ target.setAttribute('tabindex','-1'); target.focus({preventScroll:true}); }, 300);
+          }
+        });
+      });
+    });
+  </script>
+
+  <!-- Notes:
+    - SVGs replace raster images to keep payload pequena e acessível.
+    - CTA único e consistente: "Começar agora".
+    - Estrutura semântica com landmarks: header/main/section/footer.
+    - Cores escolhidas para contraste >= 4.5:1 (texto escuro em fundo claro; botões blue-700 com texto branco).
+  -->
+</body>
+</html>
