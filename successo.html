@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sucesso! Estamos processando seu pedido</title>
+  <meta name="description" content="Sucesso! Recebemos seu pedido. Estamos processando e entraremos em contato em breve." />
+  <meta name="keywords" content="renovar receita médica online, confirmação de pedido, telemedicina" />
+  <link rel="canonical" href="https://exemplo.com/sucesso" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Sucesso! Estamos processando seu pedido" />
+  <meta property="og:description" content="Recebemos seu pedido. Acompanhe o protocolo e saiba os próximos passos." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://exemplo.com/sucesso" />
+  <meta property="og:image" content="https://exemplo.com/og-sucesso.jpg" />
+  <meta property="og:locale" content="pt_BR" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Sucesso! Estamos processando seu pedido" />
+  <meta name="twitter:description" content="Recebemos seu pedido. Acompanhe o protocolo e saiba os próximos passos." />
+  <meta name="twitter:image" content="https://exemplo.com/og-sucesso.jpg" />
+
+  <!-- TailwindCSS via CDN (sem build) -->
+  <script src="https://cdn.tailwindcss.com" defer></script>
+
+  <!-- Critical CSS (mínimo, acima da dobra) -->
+  <style>
+    :root { color-scheme: light; }
+    html { scroll-behavior: smooth; }
+    .hero { min-height: 75vh; }
+    a:focus-visible, button:focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; }
+  </style>
+
+  <!-- FAQ JSON-LD para SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Quando vocês entram em contato?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Entramos em contato assim que a revisão inicial termina. Normalmente, ainda hoje."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Preciso enviar mais documentos?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Se necessário, pediremos por e-mail ou WhatsApp. Você pode anexar agora nesta página."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Como acompanho meu protocolo?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use o número de protocolo exibido aqui para consultar o status por e-mail."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "E se a receita não puder ser emitida?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Você receberá orientação clara sobre próximos passos. Reembolsos seguem nossa política."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Meus dados estão protegidos?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sim. Tratamos dados conforme a LGPD, com criptografia e controles de acesso."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Posso falar com alguém agora?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sim. Use o botão de suporte nesta página ou escreva para suporte@exemplo.com."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- ANALYTICS: add script here -->
+</head>
+<body class="antialiased text-slate-900 bg-white">
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:bg-white focus:px-3 focus:py-2 focus:rounded">Pular para o conteúdo</a>
+
+  <!-- Header -->
+  <header class="w-full border-b border-slate-200 bg-white sticky top-0 z-30" role="banner">
+    <nav class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between" aria-label="Principal">
+      <a href="/" class="flex items-center gap-2" aria-label="Página inicial">
+        <svg class="h-8 w-8" viewBox="0 0 24 24" role="img" aria-label="Logotipo: cruz médica" xmlns="http://www.w3.org/2000/svg">
+          <title>ReceitaJá</title>
+          <rect x="3" y="3" width="18" height="18" rx="4" fill="#1d4ed8"></rect>
+          <path d="M12 7v10M7 12h10" stroke="white" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        <span class="font-semibold tracking-tight">ReceitaJá</span>
+      </a>
+      <div class="flex items-center gap-3">
+        <a href="#docs" class="text-sm hover:underline">Anexar documentos</a>
+        <a href="#faq" class="text-sm hover:underline">FAQ</a>
+        <a href="#contato" class="text-sm hover:underline">Contato</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero / Confirmação -->
+  <main id="main" role="main">
+    <section class="hero bg-gradient-to-b from-white to-slate-50">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 grid lg:grid-cols-2 gap-8 items-center">
+        <div>
+          <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight">
+            Sucesso! Estamos processando seu pedido
+          </h1>
+          <p class="mt-4 text-lg text-slate-700 max-w-prose">
+            Entraremos em contato em breve por e-mail ou WhatsApp. Você pode acompanhar e enviar documentos.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="#docs" class="inline-flex items-center rounded-xl bg-blue-700 px-6 py-3 text-white font-semibold shadow hover:bg-blue-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300" aria-label="Anexar documentos agora">
+              Anexar documentos
+            </a>
+            <a href="#status" class="inline-flex items-center rounded-xl border border-slate-300 px-6 py-3 font-semibold hover:bg-white focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300" aria-label="Ver status do pedido">
+              Ver status
+            </a>
+          </div>
+          <!-- Selo de confiança junto ao herói -->
+          <div class="mt-6 flex items-center gap-4 text-sm text-slate-600" aria-label="Selos de confiança">
+            <div class="flex items-center gap-2">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" role="img" aria-label="Dados protegidos" xmlns="http://www.w3.org/2000/svg">
+                <title>LGPD</title>
+                <path d="M6 10h12v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-9z" fill="#0f172a"/>
+                <path d="M8 10V7a4 4 0 1 1 8 0v3" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <span>Dados protegidos • LGPD</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" role="img" aria-label="Conformidade médica" xmlns="http://www.w3.org/2000/svg">
+                <title>Conformidade médica</title>
+                <circle cx="12" cy="12" r="10" fill="#0f172a"/>
+                <path d="M8 12h8M12 8v8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <span>Receita eletrônica quando adequado</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ilustração leve em SVG, ajuda no entendimento e evita imagens pesadas -->
+        <div class="relative">
+          <svg class="w-full h-auto" viewBox="0 0 600 420" role="img" aria-label="Ilustração: confirmação de pedido em celular" xmlns="http://www.w3.org/2000/svg">
+            <title>Confirmação de pedido</title>
+            <rect x="40" y="40" width="520" height="340" rx="24" fill="#e2e8f0"/>
+            <rect x="120" y="80" width="360" height="260" rx="16" fill="#94a3b8"/>
+            <rect x="160" y="120" width="280" height="40" rx="8" fill="#1d4ed8"/>
+            <rect x="160" y="180" width="220" height="18" rx="4" fill="#334155"/>
+            <rect x="160" y="210" width="180" height="18" rx="4" fill="#334155"/>
+            <rect x="160" y="250" width="160" height="40" rx="10" fill="#16a34a"/>
+            <path d="M178 270l10 10 18-18" stroke="white" stroke-width="4" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resumo do Pedido -->
+    <section id="status" aria-labelledby="status-heading" class="py-12 border-y border-slate-200 bg-white">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <h2 id="status-heading" class="text-2xl font-bold tracking-tight">Resumo do pedido</h2>
+        <div class="mt-6 grid md:grid-cols-3 gap-6">
+          <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50">
+            <h3 class="font-semibold">Protocolo</h3>
+            <p id="proto" class="mt-1 text-slate-700 select-all">—</p>
+            <p class="mt-2 text-sm text-slate-600">Guarde este número para consultas futuras.</p>
+          </div>
+          <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50">
+            <h3 class="font-semibold">E-mail informado</h3>
+            <p id="email" class="mt-1 text-slate-700 break-words">—</p>
+            <p class="mt-2 text-sm text-slate-600">Verifique sua caixa de entrada e o spam.</p>
+          </div>
+          <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50">
+            <h3 class="font-semibold">Próxima atualização</h3>
+            <p class="mt-1 text-slate-700">Enviada por e-mail ou WhatsApp.</p>
+            <p class="mt-2 text-sm text-slate-600">Você receberá orientação clara sobre os próximos passos.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Próximos Passos -->
+    <section id="steps" aria-labelledby="steps-heading" class="py-16 bg-slate-50">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <h2 id="steps-heading" class="text-2xl sm:text-3xl font-bold tracking-tight">O que acontece agora</h2>
+        <div class="mt-8 grid sm:grid-cols-3 gap-8">
+          <div class="flex items-start gap-4">
+            <svg class="h-10 w-10 shrink-0" viewBox="0 0 24 24" role="img" aria-label="Triagem" xmlns="http://www.w3.org/2000/svg">
+              <title>Triagem</title>
+              <circle cx="12" cy="12" r="10" fill="#1d4ed8"></circle>
+              <path d="M7 12l3 3 7-7" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <div>
+              <h3 class="font-semibold text-lg">Triagem do pedido</h3>
+              <p class="text-slate-700">Confirmamos dados e documentos enviados.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <svg class="h-10 w-10 shrink-0" viewBox="0 0 24 24" role="img" aria-label="Revisão médica" xmlns="http://www.w3.org/2000/svg">
+              <title>Revisão médica</title>
+              <rect x="4" y="4" width="16" height="16" rx="3" fill="#0f172a"></rect>
+              <path d="M8 12h8M12 8v8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <div>
+              <h3 class="font-semibold text-lg">Revisão médica</h3>
+              <p class="text-slate-700">Avaliação responsável do histórico enviado.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <svg class="h-10 w-10 shrink-0" viewBox="0 0 24 24" role="img" aria-label="Retorno" xmlns="http://www.w3.org/2000/svg">
+              <title>Retorno</title>
+              <path d="M6 3h9l3 3v15H6z" fill="#1d4ed8"></path>
+              <path d="M9 12h6M9 16h5" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <div>
+              <h3 class="font-semibold text-lg">Retorno e orientações</h3>
+              <p class="text-slate-700">Enviamos atualização e instruções pelo seu contato.</p>
+            </div>
+          </div>
+        </div>
+        <div class="mt-8">
+          <a href="#docs" class="inline-flex items-center rounded-lg bg-blue-700 px-5 py-3 text-white font-semibold hover:bg-blue-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300" aria-label="Anexar novos arquivos">
+            Anexar mais arquivos
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Upload / Documentos -->
+    <section id="docs" aria-labelledby="docs-heading" class="py-16">
+      <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+        <h2 id="docs-heading" class="text-2xl sm:text-3xl font-bold tracking-tight">Envie documentos opcionais</h2>
+        <p class="mt-2 text-slate-700">Foto do documento, receita anterior e laudo ajudam na revisão.</p>
+        <!-- Placeholder de upload. Integração real dependerá do seu backend. -->
+        <div class="mt-6 p-6 border-2 border-dashed border-slate-300 rounded-2xl bg-slate-50">
+          <div class="flex items-center gap-3">
+            <svg class="h-6 w-6" viewBox="0 0 24 24" role="img" aria-label="Upload" xmlns="http://www.w3.org/2000/svg">
+              <title>Upload</title>
+              <path d="M12 16V4m0 0l-4 4m4-4l4 4" stroke="#0f172a" stroke-width="2" stroke-linecap="round" fill="none"/>
+              <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="#0f172a" stroke-width="2" stroke-linecap="round" fill="none"/>
+            </svg>
+            <p class="font-semibold">Arraste e solte ou <span class="underline">escolha arquivos</span></p>
+          </div>
+          <p class="mt-1 text-sm text-slate-600">Formatos: JPG, PNG, PDF. Máx. 10MB cada.</p>
+          <div class="mt-4">
+            <input aria-label="Selecionar arquivos" type="file" multiple class="sr-only" id="fileInput">
+            <button id="chooseBtn" class="rounded-lg border border-slate-300 px-4 py-2 font-semibold hover:bg-white focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300" aria-label="Escolher arquivos para enviar">
+              Escolher arquivos
+            </button>
+            <button id="uploadBtn" class="ml-2 rounded-lg bg-blue-700 text-white px-4 py-2 font-semibold hover:bg-blue-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300" aria-label="Enviar arquivos selecionados">
+              Enviar
+            </button>
+          </div>
+          <ul id="fileList" class="mt-4 text-sm text-slate-700"></ul>
+          <p id="uploadNote" class="mt-3 text-sm text-slate-600">* Demonstração. Integração real via API segura.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" aria-labelledby="faq-heading" class="py-16 bg-slate-50 border-y border-slate-200">
+      <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <h2 id="faq-heading" class="text-2xl sm:text-3xl font-bold tracking-tight">Dúvidas rápidas</h2>
+        <div class="mt-8 grid md:grid-cols-2 gap-6">
+          <details class="group border border-slate-200 rounded-xl p-4 bg-white">
+            <summary class="cursor-pointer font-semibold focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300 rounded">Quando recebo a próxima atualização?</summary>
+            <p class="mt-2 text-slate-700">Avisamos assim que a triagem terminar. Geralmente no mesmo dia útil.</p>
+          </details>
+          <details class="group border border-slate-200 rounded-xl p-4 bg-white">
+            <summary class="cursor-pointer font-semibold focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300 rounded">Posso corrigir meu e-mail?</summary>
+            <p class="mt-2 text-slate-700">Sim. Escreva para suporte@exemplo.com com seu protocolo.</p>
+          </details>
+          <details class="group border border-slate-200 rounded-xl p-4 bg-white">
+            <summary class="cursor-pointer font-semibold focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300 rounded">Como cancelo o pedido?</summary>
+            <p class="mt-2 text-slate-700">Fale com o suporte. Seguimos nossa política de reembolso.</p>
+          </details>
+          <details class="group border border-slate-200 rounded-xl p-4 bg-white">
+            <summary class="cursor-pointer font-semibold focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300 rounded">A receita é sempre emitida?</summary>
+            <p class="mt-2 text-slate-700">Emitimos apenas quando clinicamente adequado e seguro.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contato / Confiança -->
+    <section id="contato" aria-labelledby="contato-heading" class="py-12">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <h2 id="contato-heading" class="text-2xl sm:text-3xl font-bold tracking-tight">Precisa falar com a gente?</h2>
+        <div class="mt-6 grid md:grid-cols-3 gap-6">
+          <div class="p-6 rounded-2xl border border-slate-200">
+            <h3 class="font-semibold">Suporte</h3>
+            <p class="mt-1 text-slate-700">suporte@exemplo.com</p>
+            <a href="mailto:suporte@exemplo.com" class="mt-3 inline-flex rounded-lg bg-blue-700 px-4 py-2 text-white font-semibold hover:bg-blue-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300" aria-label="Escrever para o suporte">
+              Enviar e-mail
+            </a>
+          </div>
+          <div class="p-6 rounded-2xl border border-slate-200">
+            <h3 class="font-semibold">WhatsApp</h3>
+            <p class="mt-1 text-slate-700">Atendimento em horário comercial.</p>
+            <a href="https://wa.me/5500000000000" class="mt-3 inline-flex rounded-lg border border-slate-300 px-4 py-2 font-semibold hover:bg-white focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300" aria-label="Abrir WhatsApp">
+              Abrir WhatsApp
+            </a>
+          </div>
+          <div class="p-6 rounded-2xl border border-slate-200">
+            <h3 class="font-semibold">Privacidade</h3>
+            <p class="mt-1 text-slate-700">Seus dados são tratados conforme LGPD.</p>
+            <div class="mt-3 flex items-center gap-2 text-sm text-slate-600" aria-label="Selos de confiança">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" role="img" aria-label="Cadeado" xmlns="http://www.w3.org/2000/svg">
+                <title>Segurança</title>
+                <path d="M6 10h12v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-9z" fill="#0f172a"/>
+                <path d="M8 10V7a4 4 0 1 1 8 0v3" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <span>Criptografia e auditoria clínica</span>
+            </div>
+          </div>
+        </div>
+        <p class="mt-6 text-sm text-slate-600">
+          Aviso: este serviço atende à renovação de receitas de ansiedade já diagnosticada. Não substitui consulta completa. A avaliação é individual.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-10 border-t border-slate-200" role="contentinfo">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <svg class="h-6 w-6" viewBox="0 0 24 24" role="img" aria-label="Logotipo pequeno" xmlns="http://www.w3.org/2000/svg">
+          <title>ReceitaJá</title>
+          <rect x="3" y="3" width="18" height="18" rx="4" fill="#1d4ed8"/>
+          <path d="M12 7v10M7 12h10" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="font-semibold">ReceitaJá</span>
+      </div>
+      <nav aria-label="Rodapé">
+        <ul class="flex flex-wrap gap-6">
+          <li><a class="hover:underline" href="/privacy" aria-label="Política de Privacidade">Privacy</a></li>
+          <li><a class="hover:underline" href="/terms" aria-label="Termos de Uso">Terms</a></li>
+          <li><a class="hover:underline" href="/contato" aria-label="Contato">Contact</a></li>
+        </ul>
+      </nav>
+      <p class="text-sm text-slate-600">© <span id="year">2025</span> ReceitaJá.</p>
+    </div>
+  </footer>
+
+  <!-- JS não crítico (adiado) -->
+  <script defer>
+    // Atualiza o ano automaticamente
+    document.addEventListener('DOMContentLoaded', function () {
+      const y = document.getElementById('year');
+      if (y) y.textContent = new Date().getFullYear();
+    });
+
+    // Lê parâmetros da URL para exibir protocolo e e-mail
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const proto = params.get('protocolo') || params.get('protocol') || params.get('p');
+      const mail = params.get('email') || params.get('e');
+      const protoEl = document.getElementById('proto');
+      const emailEl = document.getElementById('email');
+      if (proto && protoEl) protoEl.textContent = proto;
+      if (mail && emailEl) emailEl.textContent = mail;
+
+      // Upload demo: não envia arquivos; apenas lista nomes para UX
+      const chooseBtn = document.getElementById('chooseBtn');
+      const uploadBtn = document.getElementById('uploadBtn');
+      const fileInput = document.getElementById('fileInput');
+      const fileList = document.getElementById('fileList');
+      const note = document.getElementById('uploadNote');
+
+      function renderList(files) {
+        fileList.innerHTML = '';
+        Array.from(files).forEach(f => {
+          const li = document.createElement('li');
+          li.textContent = `• ${f.name} (${Math.ceil(f.size/1024)} KB)`;
+          fileList.appendChild(li);
+        });
+      }
+
+      chooseBtn?.addEventListener('click', () => fileInput?.click());
+      fileInput?.addEventListener('change', (e) => renderList(e.target.files || []));
+      uploadBtn?.addEventListener('click', () => {
+        note.textContent = 'Arquivos prontos para envio. Integração real via API segura.';
+      });
+
+      // Acessibilidade de navegação suave + foco após âncora
+      document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', function () {
+          const id = a.getAttribute('href').slice(1);
+          const target = document.getElementById(id);
+          if (target) setTimeout(() => { target.setAttribute('tabindex','-1'); target.focus({preventScroll:true}); }, 300);
+        });
+      });
+    })();
+  </script>
+
+  <!-- Notas:
+    - Página de sucesso focada em clareza e próximos passos.
+    - Copys curtas, voz acolhedora e responsável; sem promessas absolutas.
+    - SVGs leves e com alt/title garantem A11y e desempenho.
+    - Links obrigatórios: Privacy, Terms, Contact.
+  -->
+</body>
+</html>
