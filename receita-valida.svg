@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Receita Digital Válida" class="w-full h-64" viewBox="0 0 400 300" fill="none">
+  <rect x="50" y="50" width="300" height="200" rx="10" fill="#EEF2FF" stroke="#3B82F6" stroke-width="2"/>
+  <rect x="70" y="80" width="260" height="20" rx="4" fill="#3B82F6"/>
+  <rect x="70" y="120" width="200" height="12" rx="2" fill="#9CA3AF"/>
+  <rect x="70" y="140" width="180" height="12" rx="2" fill="#9CA3AF"/>
+  <rect x="70" y="160" width="220" height="12" rx="2" fill="#9CA3AF"/>
+  <circle cx="320" cy="90" r="8" fill="#10B981"/>
+  <path d="M316 90l2 2 4-4" stroke="white" stroke-width="2" fill="none"/>
+  <text x="200" y="220" text-anchor="middle" style="fill:#4b5563; font-size: 0.75rem; line-height: 1rem; font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'">Receita Digital Válida</text>
+</svg>
