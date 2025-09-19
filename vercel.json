@@ -1,4 +1,6 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 3,
   "functions": {
     "memed-sdk/api/**/*.ts": {
       "runtime": "@vercel/node"
