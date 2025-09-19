@@ -1,5 +1,5 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import { MemedClient, MemedError, type PatientCreate } from '../../src';
+import { MemedClient, MemedError, type PatientCreate } from '../../memed-sdk/src';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers
