@@ -31,7 +31,11 @@
   ],
   "author": "DrMente",
   "license": "MIT",
+  "dependencies": {
+    "@vercel/node": "^3.0.0"
+  },
   "devDependencies": {
+    "@types/node": "^20.0.0",
     "typescript": "~5.8.3",
     "vite": "^7.1.6"
   },

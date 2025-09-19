@@ -1,0 +1,17 @@
+{
+  "functions": {
+    "memed-sdk/api/**/*.ts": {
+      "runtime": "@vercel/node"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/search-patient",
+      "destination": "/api/search-patient"
+    },
+    {
+      "source": "/api/create-patient",
+      "destination": "/api/create-patient"
+    }
+  ]
+}
