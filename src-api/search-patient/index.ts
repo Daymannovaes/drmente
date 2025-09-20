@@ -1,11 +1,11 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { MemedClient, MemedError } from '../../memed-sdk/src/index';
+import auth from '../auth';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (!auth(req, res)) {
+    return;
+  }
 
   // Handle preflight requests
   if (req.method === 'OPTIONS') {
