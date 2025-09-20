@@ -1,6 +1,6 @@
-import { buildUrl, requestJSON } from "./http";
-import type { RequestOptions, Paginated } from "./models/common";
-import type { PatientCreate, Patient, PatientSearchParams } from "./models/patient";
+import { buildUrl, requestJSON } from "./http.js";
+import type { RequestOptions, Paginated } from "./models/common.js";
+import type { PatientCreate, Patient, PatientSearchParams } from "./models/patient.js";
 
 export interface MemedClientOptions {
   token: string; // JWT for x-token header

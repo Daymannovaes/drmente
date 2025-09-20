@@ -1,4 +1,4 @@
-import type { QueryString } from "./models/common";
+import type { QueryString } from "./models/common.js";
 
 export class MemedError extends Error {
   status: number;
