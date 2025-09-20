@@ -2,13 +2,22 @@ import { a as auth, M as MemedClient } from "./auth-DI3I7hHd.js";
 function getAnswersByType(response, type) {
   return response.data.filter((q) => q.type === type).map((q) => q.answer);
 }
+function getAnswerByQuestionPattern(response, pattern) {
+  const question = response.data.find((q) => {
+    if (typeof pattern === "string") {
+      return q.question.includes(pattern);
+    }
+    return pattern.test(q.question);
+  });
+  return question?.answer;
+}
 function extractPersonalData(response) {
   return {
     name: getAnswersByType(response, "name")[0],
     phone: getAnswersByType(response, "phone")[0],
     email: getAnswersByType(response, "email")[0],
-    cpf: getAnswersByType(response, "cpf")[0],
-    birthdate: getAnswersByType(response, "birthdate")[0]
+    cpf: getAnswersByType(response, "cpf")[0] || getAnswerByQuestionPattern(response, /CPF/),
+    birthdate: getAnswersByType(response, "birthdate")[0] || getAnswerByQuestionPattern(response, /Data de nascimento/i)
   };
 }
 function sendNtfy(message, url = "https://ntfy.sh/drmente-prod-grafqk0d37b5") {
@@ -39,20 +48,20 @@ async function handler(req, res) {
       });
     }
     const personalData = extractPersonalData(formShareData);
-    await sendNtfy(`
-Resposta recebida no formulário!
-Nome: ${personalData?.name}, Telefone: ${personalData?.phone}, Email: ${personalData?.email}, CPF: ${personalData?.cpf}, Data de nascimento: ${personalData?.birthdate}
-`);
+    await sendNtfy(`Resposta recebida no formulário para ${personalData?.name}. Veja a resposta completa em https://formshare.ai/forms/r/cmfly6p6q0003ob39pv5mvisq`);
     const memedClient = new MemedClient({ token: process.env.MEMED_TOKEN });
-    const patient = await memedClient.searchPatients({ filter: personalData.cpf || personalData.name, size: 1, page: 1 });
-    if (patient.data.length > 0) {
-      await sendNtfy(`Paciente encontrado em Memed: ${patient.data[0].full_name}`);
+    const patient = await memedClient.searchPatients({ filter: personalData.cpf || personalData.name, size: 10, page: 1 });
+    if (patient.data.length > 1) {
+      await sendNtfy(`Mais de um paciente encontrado em Memed (${patient.data.length}) para ${personalData.name}, CPF: ${personalData.cpf}`);
+    } else if (patient.data.length === 1) {
+      await sendNtfy(`Paciente encontrado em Memed: ${patient.data[0].full_name} para ${personalData.name}, CPF: ${personalData.cpf}`);
     } else {
-      await sendNtfy(`Paciente não encontrado em Memed: ${personalData.name}, CPF: ${personalData.cpf}`);
+      await sendNtfy(`Paciente não encontrado em Memed para ${personalData.name}, CPF: ${personalData.cpf}`);
     }
     return res.status(200).json({
       success: true,
-      message: "Webhook processed successfully"
+      message: "Webhook processed successfully",
+      foundPatients: patient.data.length
     });
   } catch (error) {
     console.error("Error processing FormShare webhook:", error);

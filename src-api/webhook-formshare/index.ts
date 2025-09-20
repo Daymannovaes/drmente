@@ -32,25 +32,29 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const personalData: PersonalData = extractPersonalData(formShareData);
 
-    await sendNtfy(`
-Resposta recebida no formulário!
-Nome: ${personalData?.name}, Telefone: ${personalData?.phone}, Email: ${personalData?.email}, CPF: ${personalData?.cpf}, Data de nascimento: ${personalData?.birthdate}
-`);
+    await sendNtfy(`Resposta recebida no formulário para ${personalData?.name}. Veja a resposta completa em https://formshare.ai/forms/r/cmfly6p6q0003ob39pv5mvisq`);
 
     const memedClient = new MemedClient({ token: process.env.MEMED_TOKEN! });
 
-    const patient = await memedClient.searchPatients({ filter: personalData.cpf || personalData.name, size: 1, page: 1 });
+    const patient = await memedClient.searchPatients({ filter: personalData.cpf || personalData.name, size: 10, page: 1 });
 
-    if (patient.data.length > 0) {
-      await sendNtfy(`Paciente encontrado em Memed: ${patient.data[0].full_name}`);
+
+    if (patient.data.length > 1) {
+      await sendNtfy(`Mais de um paciente encontrado em Memed (${patient.data.length}) para ${personalData.name}, CPF: ${personalData.cpf}`);
+    } else if (patient.data.length === 1) {
+      await sendNtfy(`Paciente encontrado em Memed: ${patient.data[0].full_name} para ${personalData.name}, CPF: ${personalData.cpf}`);
     } else {
-      await sendNtfy(`Paciente não encontrado em Memed: ${personalData.name}, CPF: ${personalData.cpf}`);
+      await sendNtfy(`Paciente não encontrado em Memed para ${personalData.name}, CPF: ${personalData.cpf}`);
     }
 
     return res.status(200).json({
       success: true,
-      message: 'Webhook processed successfully'
+      message: 'Webhook processed successfully',
+      foundPatients: patient.data.length
     });
+
+    // proximos passos: criar o cara caso ele não existe,
+    // depois já pré-criar a prescrição
 
   //   // Extract structured data
   //   const preConsultaData: PreConsultaData = extractPreConsultaData(formShareData);
