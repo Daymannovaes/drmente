@@ -1,4 +1,5 @@
-import { a as auth, M as MemedClient, b as MemedError } from "./auth-DkXSUjMP.js";
+import { M as MemedClient, a as MemedError } from "./client-DjwK6qim.js";
+import { a as auth } from "./auth-YJXmEdcS.js";
 async function handler(req, res) {
   if (!auth(req, res)) {
     return;

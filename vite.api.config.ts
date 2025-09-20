@@ -7,6 +7,7 @@ export default defineConfig({
       entry: {
         'search-patient': resolve(__dirname, 'src-api/search-patient/index.ts'),
         'create-patient': resolve(__dirname, 'src-api/create-patient/index.ts'),
+        'webhook-formshare': resolve(__dirname, 'src-api/webhook-formshare/index.ts'),
       },
       formats: ['es'],
       fileName: (format, entryName) => `${entryName}.js`
