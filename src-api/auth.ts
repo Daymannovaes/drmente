@@ -26,6 +26,8 @@ function auth(req: VercelRequest, res: VercelResponse): boolean {
 
   // Get expected token from environment
   const validToken = process.env.AUTH_API_TOKEN;
+  console.log('validToken', validToken);
+  console.log('token', token);
   if (!validToken) {
     res.status(500).json({
       error: 'Server configuration error',
