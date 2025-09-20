@@ -47,6 +47,11 @@ Nome: ${personalData?.name}, Telefone: ${personalData?.phone}, Email: ${personal
       await sendNtfy(`Paciente não encontrado em Memed: ${personalData.name}, CPF: ${personalData.cpf}`);
     }
 
+    return res.status(200).json({
+      success: true,
+      message: 'Webhook processed successfully'
+    });
+
   //   // Extract structured data
   //   const preConsultaData: PreConsultaData = extractPreConsultaData(formShareData);
 

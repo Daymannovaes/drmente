@@ -50,6 +50,10 @@ Nome: ${personalData?.name}, Telefone: ${personalData?.phone}, Email: ${personal
     } else {
       await sendNtfy(`Paciente não encontrado em Memed: ${personalData.name}, CPF: ${personalData.cpf}`);
     }
+    return res.status(200).json({
+      success: true,
+      message: "Webhook processed successfully"
+    });
   } catch (error) {
     console.error("Error processing FormShare webhook:", error);
     return res.status(500).json({
