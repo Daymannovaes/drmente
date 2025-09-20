@@ -20,9 +20,6 @@
 
     // Useful for imports like "@/lib/db"
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["./*"]
-    },
 
     // Types for both browser & Node/Vercel
     "types": ["@types/node", "@vercel/node"]
