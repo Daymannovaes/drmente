@@ -143,7 +143,6 @@ describe('Webhook FormShare API', () => {
       expect(mockJsonResponse).toHaveBeenCalledWith({
         success: true,
         message: 'Webhook processed successfully',
-        foundPatients: 1
       });
     });
 
@@ -185,7 +184,6 @@ describe('Webhook FormShare API', () => {
       expect(mockJsonResponse).toHaveBeenCalledWith({
         success: true,
         message: 'Webhook processed successfully',
-        foundPatients: 0
       });
     });
 
@@ -238,7 +236,6 @@ describe('Webhook FormShare API', () => {
       expect(mockJsonResponse).toHaveBeenCalledWith({
         success: true,
         message: 'Webhook processed successfully',
-        foundPatients: 2
       });
     });
   });

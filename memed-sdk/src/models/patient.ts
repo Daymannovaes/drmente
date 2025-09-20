@@ -14,14 +14,24 @@ export interface PatientCreate {
 }
 
 export interface Patient extends PatientCreate {
-  id?: string;
-  uuid?: string;
-  created_at?: string;
-  updated_at?: string;
+  id: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface PatientSearchParams {
   filter: string; // e.g., CPF or name
   size?: number; // default 5
   page?: number; // default 1
+}
+export interface PatientAnnotationCreate {
+  content: string;
+  patient_id: string;
+}
+export interface PatientAnnotation extends PatientAnnotationCreate {
+  id: string;
+  created_at: string;
+  updated_at: string;
+
+  status: number; // não sei o que é isso, na API sempre retorna 1
 }

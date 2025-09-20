@@ -3,46 +3,74 @@ import auth from '../auth';
 import type { FormShareResponse, PersonalData } from './formshare';
 import { extractPersonalData } from './formshare';
 import { sendNtfy } from './ntfy';
-import { MemedClient } from '../../memed-sdk/src';
+import { MemedClient, type Patient } from '../../memed-sdk/src';
+
+function validate(req: VercelRequest, res: VercelResponse): boolean {
+  // Only allow POST method for webhooks
+  if (req.method !== 'POST') {
+    res.status(405).json({
+      error: 'Method not allowed',
+      message: 'Only POST method is supported for webhooks'
+    });
+    return false;
+  }
+
+  const formShareData: FormShareResponse = req.body;
+
+  if (!formShareData.formId || !formShareData.submissionId || !formShareData.data) {
+    res.status(400).json({
+      error: 'Bad request',
+      message: 'Invalid FormShare response format'
+    });
+    return false;
+  }
+  return true;
+}
+
+async function findPatientOrCreate(personalData: PersonalData, memedClient: MemedClient): Promise<Patient | null> {
+  const patient = await memedClient.searchPatients({ filter: personalData.cpf || personalData.name, size: 10, page: 1 });
+  if (patient.data.length > 1) {
+    await sendNtfy(`Mais de um paciente encontrado em Memed (${patient.data.length}) para ${personalData.name}, CPF: ${personalData.cpf}`);
+    return null;
+  }
+
+  if (patient.data.length === 1) {
+    return patient.data[0];
+  }
+
+  // @todo create
+  return null;
+}
+
+async function handlePatient(patient: Patient, personalData: PersonalData, memedClient: MemedClient) {
+    await sendNtfy(`Paciente encontrado em Memed: ${patient.full_name} para ${personalData.name}, CPF: ${personalData.cpf}`);
+
+    await memedClient.createPatientAnnotation({
+      content: `Resposta recebida no formulário para ${personalData.name}. Veja a resposta completa em https://formshare.ai/forms/r/cmfly6p6q0003ob39pv5mvisq`,
+      patient_id: patient.id
+    });
+}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!auth(req, res)) {
     return;
   }
 
-  // Only allow POST method for webhooks
-  if (req.method !== 'POST') {
-    return res.status(405).json({
-      error: 'Method not allowed',
-      message: 'Only POST method is supported for webhooks'
-    });
+  if (!validate(req, res)) {
+    return;
   }
 
   try {
-    // Parse and validate the FormShare response
-    const formShareData: FormShareResponse = req.body;
-
-    // Validate required fields
-    if (!formShareData.formId || !formShareData.submissionId || !formShareData.data) {
-      return res.status(400).json({
-        error: 'Bad request',
-        message: 'Invalid FormShare response format'
-      });
-    }
-
-    const personalData: PersonalData = extractPersonalData(formShareData);
+    const personalData: PersonalData = extractPersonalData(req.body);
 
     await sendNtfy(`Resposta recebida no formulário para ${personalData?.name}. Veja a resposta completa em https://formshare.ai/forms/r/cmfly6p6q0003ob39pv5mvisq`);
 
     const memedClient = new MemedClient({ token: process.env.MEMED_TOKEN! });
 
-    const patient = await memedClient.searchPatients({ filter: personalData.cpf || personalData.name, size: 10, page: 1 });
+    const patient = await findPatientOrCreate(personalData, memedClient);
 
-
-    if (patient.data.length > 1) {
-      await sendNtfy(`Mais de um paciente encontrado em Memed (${patient.data.length}) para ${personalData.name}, CPF: ${personalData.cpf}`);
-    } else if (patient.data.length === 1) {
-      await sendNtfy(`Paciente encontrado em Memed: ${patient.data[0].full_name} para ${personalData.name}, CPF: ${personalData.cpf}`);
+    if (patient) {
+      await handlePatient(patient, personalData, memedClient);
     } else {
       await sendNtfy(`Paciente não encontrado em Memed para ${personalData.name}, CPF: ${personalData.cpf}`);
     }
@@ -50,7 +78,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json({
       success: true,
       message: 'Webhook processed successfully',
-      foundPatients: patient.data.length
     });
 
     // proximos passos: criar o cara caso ele não existe,

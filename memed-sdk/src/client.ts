@@ -1,6 +1,6 @@
 import { buildUrl, requestJSON } from "./http.js";
 import type { RequestOptions, Paginated } from "./models/common.js";
-import type { PatientCreate, Patient, PatientSearchParams } from "./models/patient.js";
+import type { PatientCreate, Patient, PatientSearchParams, PatientAnnotationCreate, PatientAnnotation } from "./models/patient.js";
 
 export interface MemedClientOptions {
   token: string; // JWT for x-token header
@@ -32,6 +32,16 @@ export class MemedClient {
       signal: opts.signal,
       headers: { ...this.defaultHeaders, ...(opts.headers ?? {}), "x-token": this.token },
       body: JSON.stringify(patient),
+    });
+  }
+
+  async createPatientAnnotation(annotation: PatientAnnotationCreate, opts: RequestOptions = {}): Promise<PatientAnnotation> {
+    const url = buildUrl(this.baseURL, `/v2/patient-management/patients-annotations`);
+    return requestJSON<PatientAnnotation>(url, {
+      method: "POST",
+      signal: opts.signal,
+      headers: { ...this.defaultHeaders, ...(opts.headers ?? {}), "x-token": this.token },
+      body: JSON.stringify(annotation),
     });
   }
 
