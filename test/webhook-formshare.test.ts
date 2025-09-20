@@ -112,7 +112,7 @@ describe('Webhook FormShare API', () => {
         ]
       };
 
-      const mockSearchResults: Paginated<Patient> = {
+      const mockSearchResults: Paginated<Partial<Patient>> = {
         data: [
           {
             id: 'patient-123',
@@ -132,6 +132,9 @@ describe('Webhook FormShare API', () => {
         http.get('https://gateway.memed.com.br/v2/patient-management/patients/search', () => {
           return HttpResponse.json(mockSearchResults)
         }),
+        http.post('https://gateway.memed.com.br/v2/patient-management/patients-annotations', () => {
+          return HttpResponse.json({ ok: true })
+        }),
         http.post('https://ntfy.sh/drmente-prod-grafqk0d37b5', () => {
           return HttpResponse.json({ ok: true })
         })
@@ -143,6 +146,7 @@ describe('Webhook FormShare API', () => {
       expect(mockJsonResponse).toHaveBeenCalledWith({
         success: true,
         message: 'Webhook processed successfully',
+        foundPatient: true
       });
     });
 
@@ -184,6 +188,7 @@ describe('Webhook FormShare API', () => {
       expect(mockJsonResponse).toHaveBeenCalledWith({
         success: true,
         message: 'Webhook processed successfully',
+        foundPatient: false
       });
     });
 
@@ -201,7 +206,7 @@ describe('Webhook FormShare API', () => {
         ]
       };
 
-      const mockMultipleResults: Paginated<Patient> = {
+      const mockMultipleResults: Paginated<Partial<Patient>> = {
         data: [
           {
             id: 'patient-123',
@@ -236,6 +241,7 @@ describe('Webhook FormShare API', () => {
       expect(mockJsonResponse).toHaveBeenCalledWith({
         success: true,
         message: 'Webhook processed successfully',
+        foundPatient: false
       });
     });
   });

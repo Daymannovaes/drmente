@@ -15,8 +15,33 @@ export interface PatientCreate {
 
 export interface Patient extends PatientCreate {
   id: string;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  patient_legacy_id: number;
+  doctor_legacy_id: number;
+  rg?: string
+  use_social_name: boolean;
+  birthdate: string;
+  is_mother_unknown: boolean;
+  mother_name?: string
+  without_cpf: boolean;
+  phone_type_id: number;
+  address: PatientAddress;
+  emergency_contacts: unknown[];
+  allergies: unknown[];
+  conditions: unknown[];
+  patient_guardian?: unknown;
+  partner_id?: unknown;
+  external_i?: unknown;
+}
+
+export interface PatientAddress {
+  city? : string;
+  state?: string;
+  zip_code?: string;
+  street?: string;
+  number?: string;
+  complement?: string;
+  neighborhood?: string;
 }
 
 export interface PatientSearchParams {

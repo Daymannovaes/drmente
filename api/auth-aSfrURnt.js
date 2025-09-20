@@ -58,6 +58,15 @@ class MemedClient {
       body: JSON.stringify(patient)
     });
   }
+  async createPatientAnnotation(annotation, opts = {}) {
+    const url = buildUrl(this.baseURL, `/v2/patient-management/patients-annotations`);
+    return requestJSON(url, {
+      method: "POST",
+      signal: opts.signal,
+      headers: { ...this.defaultHeaders, ...opts.headers ?? {}, "x-token": this.token },
+      body: JSON.stringify(annotation, null, 2)
+    });
+  }
   /** Search patients (GET /v2/patient-management/patients/search) */
   async searchPatients(params, opts = {}) {
     const { filter, size = 5, page = 1 } = params;

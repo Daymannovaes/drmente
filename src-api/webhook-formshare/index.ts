@@ -42,11 +42,16 @@ async function findPatientOrCreate(personalData: PersonalData, memedClient: Meme
   return null;
 }
 
-async function handlePatient(patient: Patient, personalData: PersonalData, memedClient: MemedClient) {
+async function handlePatient(patient: Patient, personalData: PersonalData, formShareData: FormShareResponse, memedClient: MemedClient) {
     await sendNtfy(`Paciente encontrado em Memed: ${patient.full_name} para ${personalData.name}, CPF: ${personalData.cpf}`);
 
     await memedClient.createPatientAnnotation({
-      content: `Resposta recebida no formulário para ${personalData.name}. Veja a resposta completa em https://formshare.ai/forms/r/cmfly6p6q0003ob39pv5mvisq`,
+      content: `
+Resposta recebida no formulário para ${personalData.name}. Veja em https://formshare.ai/forms/r/${formShareData.formId}
+
+Resposta do formulário:
+${JSON.stringify(formShareData, null, 2)}
+`,
       patient_id: patient.id
     });
 }
@@ -70,7 +75,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const patient = await findPatientOrCreate(personalData, memedClient);
 
     if (patient) {
-      await handlePatient(patient, personalData, memedClient);
+      await handlePatient(patient, personalData, req.body, memedClient);
     } else {
       await sendNtfy(`Paciente não encontrado em Memed para ${personalData.name}, CPF: ${personalData.cpf}`);
     }
@@ -78,6 +83,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json({
       success: true,
       message: 'Webhook processed successfully',
+      foundPatient: Boolean(patient)
     });
 
     // proximos passos: criar o cara caso ele não existe,

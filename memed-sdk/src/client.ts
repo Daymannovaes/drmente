@@ -41,7 +41,7 @@ export class MemedClient {
       method: "POST",
       signal: opts.signal,
       headers: { ...this.defaultHeaders, ...(opts.headers ?? {}), "x-token": this.token },
-      body: JSON.stringify(annotation),
+      body: JSON.stringify(annotation, null, 2),
     });
   }
 

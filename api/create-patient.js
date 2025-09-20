@@ -1,4 +1,42 @@
-import { a as auth, M as MemedClient, b as MemedError } from "./auth-DI3I7hHd.js";
+import { a as auth, M as MemedClient, b as MemedError } from "./auth-aSfrURnt.js";
+function validatePatientData(patientData, res) {
+  if (!patientData.full_name || typeof patientData.full_name !== "string") {
+    res.status(400).json({
+      error: "Bad request",
+      message: "full_name is required and must be a string"
+    });
+    return false;
+  }
+  if (patientData.cpf && typeof patientData.cpf !== "string") {
+    res.status(400).json({
+      error: "Bad request",
+      message: "cpf must be a string"
+    });
+    return false;
+  }
+  if (patientData.birthdate && typeof patientData.birthdate !== "string") {
+    res.status(400).json({
+      error: "Bad request",
+      message: "birthdate must be a string in YYYY-MM-DD format"
+    });
+    return false;
+  }
+  if (patientData.email && typeof patientData.email !== "string") {
+    res.status(400).json({
+      error: "Bad request",
+      message: "email must be a string"
+    });
+    return false;
+  }
+  if (patientData.phone && typeof patientData.phone !== "string") {
+    res.status(400).json({
+      error: "Bad request",
+      message: "phone must be a string"
+    });
+    return false;
+  }
+  return true;
+}
 async function handler(req, res) {
   if (!auth(req, res)) {
     return;
@@ -22,35 +60,8 @@ async function handler(req, res) {
     }
     const memedClient = new MemedClient({ token });
     const patientData = req.body;
-    if (!patientData.full_name || typeof patientData.full_name !== "string") {
-      return res.status(400).json({
-        error: "Bad request",
-        message: "full_name is required and must be a string"
-      });
-    }
-    if (patientData.cpf && typeof patientData.cpf !== "string") {
-      return res.status(400).json({
-        error: "Bad request",
-        message: "cpf must be a string"
-      });
-    }
-    if (patientData.birthdate && typeof patientData.birthdate !== "string") {
-      return res.status(400).json({
-        error: "Bad request",
-        message: "birthdate must be a string in YYYY-MM-DD format"
-      });
-    }
-    if (patientData.email && typeof patientData.email !== "string") {
-      return res.status(400).json({
-        error: "Bad request",
-        message: "email must be a string"
-      });
-    }
-    if (patientData.phone && typeof patientData.phone !== "string") {
-      return res.status(400).json({
-        error: "Bad request",
-        message: "phone must be a string"
-      });
+    if (!validatePatientData(patientData, res)) {
+      return;
     }
     const createdPatient = await memedClient.createPatient(patientData);
     return res.status(201).json({

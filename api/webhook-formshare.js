@@ -1,4 +1,4 @@
-import { a as auth, M as MemedClient } from "./auth-DI3I7hHd.js";
+import { a as auth, M as MemedClient } from "./auth-aSfrURnt.js";
 function getAnswersByType(response, type) {
   return response.data.filter((q) => q.type === type).map((q) => q.answer);
 }
@@ -29,39 +29,68 @@ function sendNtfy(message, url = "https://ntfy.sh/drmente-prod-grafqk0d37b5") {
     body: JSON.stringify(payload)
   });
 }
+function validate(req, res) {
+  if (req.method !== "POST") {
+    res.status(405).json({
+      error: "Method not allowed",
+      message: "Only POST method is supported for webhooks"
+    });
+    return false;
+  }
+  const formShareData = req.body;
+  if (!formShareData.formId || !formShareData.submissionId || !formShareData.data) {
+    res.status(400).json({
+      error: "Bad request",
+      message: "Invalid FormShare response format"
+    });
+    return false;
+  }
+  return true;
+}
+async function findPatientOrCreate(personalData, memedClient) {
+  const patient = await memedClient.searchPatients({ filter: personalData.cpf || personalData.name, size: 10, page: 1 });
+  if (patient.data.length > 1) {
+    await sendNtfy(`Mais de um paciente encontrado em Memed (${patient.data.length}) para ${personalData.name}, CPF: ${personalData.cpf}`);
+    return null;
+  }
+  if (patient.data.length === 1) {
+    return patient.data[0];
+  }
+  return null;
+}
+async function handlePatient(patient, personalData, formShareData, memedClient) {
+  await sendNtfy(`Paciente encontrado em Memed: ${patient.full_name} para ${personalData.name}, CPF: ${personalData.cpf}`);
+  await memedClient.createPatientAnnotation({
+    content: `
+Resposta recebida no formulário para ${personalData.name}. Veja em https://formshare.ai/forms/r/${formShareData.formId}
+
+Resposta do formulário:
+${JSON.stringify(formShareData, null, 2)}
+`,
+    patient_id: patient.id
+  });
+}
 async function handler(req, res) {
   if (!auth(req, res)) {
     return;
   }
-  if (req.method !== "POST") {
-    return res.status(405).json({
-      error: "Method not allowed",
-      message: "Only POST method is supported for webhooks"
-    });
+  if (!validate(req, res)) {
+    return;
   }
   try {
-    const formShareData = req.body;
-    if (!formShareData.formId || !formShareData.submissionId || !formShareData.data) {
-      return res.status(400).json({
-        error: "Bad request",
-        message: "Invalid FormShare response format"
-      });
-    }
-    const personalData = extractPersonalData(formShareData);
+    const personalData = extractPersonalData(req.body);
     await sendNtfy(`Resposta recebida no formulário para ${personalData?.name}. Veja a resposta completa em https://formshare.ai/forms/r/cmfly6p6q0003ob39pv5mvisq`);
     const memedClient = new MemedClient({ token: process.env.MEMED_TOKEN });
-    const patient = await memedClient.searchPatients({ filter: personalData.cpf || personalData.name, size: 10, page: 1 });
-    if (patient.data.length > 1) {
-      await sendNtfy(`Mais de um paciente encontrado em Memed (${patient.data.length}) para ${personalData.name}, CPF: ${personalData.cpf}`);
-    } else if (patient.data.length === 1) {
-      await sendNtfy(`Paciente encontrado em Memed: ${patient.data[0].full_name} para ${personalData.name}, CPF: ${personalData.cpf}`);
+    const patient = await findPatientOrCreate(personalData, memedClient);
+    if (patient) {
+      await handlePatient(patient, personalData, req.body, memedClient);
     } else {
       await sendNtfy(`Paciente não encontrado em Memed para ${personalData.name}, CPF: ${personalData.cpf}`);
     }
     return res.status(200).json({
       success: true,
       message: "Webhook processed successfully",
-      foundPatients: patient.data.length
+      foundPatient: Boolean(patient)
     });
   } catch (error) {
     console.error("Error processing FormShare webhook:", error);
