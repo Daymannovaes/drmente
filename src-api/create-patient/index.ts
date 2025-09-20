@@ -2,6 +2,55 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { MemedClient, MemedError, type PatientCreate } from '../../memed-sdk/src/index';
 import auth from '../auth';
 
+function validatePatientData(patientData: PatientCreate, res: VercelResponse): boolean {
+  // Validate required fields
+  if (!patientData.full_name || typeof patientData.full_name !== 'string') {
+    res.status(400).json({
+      error: 'Bad request',
+      message: 'full_name is required and must be a string'
+    });
+    return false;
+  }
+
+  // Validate CPF format if provided
+  if (patientData.cpf && typeof patientData.cpf !== 'string') {
+    res.status(400).json({
+      error: 'Bad request',
+      message: 'cpf must be a string'
+    });
+    return false;
+  }
+
+  // Validate birthdate format if provided
+  if (patientData.birthdate && typeof patientData.birthdate !== 'string') {
+    res.status(400).json({
+      error: 'Bad request',
+      message: 'birthdate must be a string in YYYY-MM-DD format'
+    });
+    return false;
+  }
+
+  // Validate email format if provided
+  if (patientData.email && typeof patientData.email !== 'string') {
+    res.status(400).json({
+      error: 'Bad request',
+      message: 'email must be a string'
+    });
+    return false;
+  }
+
+  // Validate phone format if provided
+  if (patientData.phone && typeof patientData.phone !== 'string') {
+    res.status(400).json({
+      error: 'Bad request',
+      message: 'phone must be a string'
+    });
+    return false;
+  }
+
+  return true;
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!auth(req, res)) {
     return;
@@ -36,44 +85,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Extract patient data from request body
     const patientData: PatientCreate = req.body;
 
-    // Validate required fields
-    if (!patientData.full_name || typeof patientData.full_name !== 'string') {
-      return res.status(400).json({
-        error: 'Bad request',
-        message: 'full_name is required and must be a string'
-      });
-    }
-
-    // Validate CPF format if provided
-    if (patientData.cpf && typeof patientData.cpf !== 'string') {
-      return res.status(400).json({
-        error: 'Bad request',
-        message: 'cpf must be a string'
-      });
-    }
-
-    // Validate birthdate format if provided
-    if (patientData.birthdate && typeof patientData.birthdate !== 'string') {
-      return res.status(400).json({
-        error: 'Bad request',
-        message: 'birthdate must be a string in YYYY-MM-DD format'
-      });
-    }
-
-    // Validate email format if provided
-    if (patientData.email && typeof patientData.email !== 'string') {
-      return res.status(400).json({
-        error: 'Bad request',
-        message: 'email must be a string'
-      });
-    }
-
-    // Validate phone format if provided
-    if (patientData.phone && typeof patientData.phone !== 'string') {
-      return res.status(400).json({
-        error: 'Bad request',
-        message: 'phone must be a string'
-      });
+    if (!validatePatientData(patientData, res)) {
+      return;
     }
 
     // Create patient using the SDK
