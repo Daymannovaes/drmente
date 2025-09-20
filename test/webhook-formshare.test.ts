@@ -13,7 +13,9 @@ describe('Webhook FormShare API', () => {
   let mockJsonResponse: any;
   let mockStatus: any;
 
-  beforeAll(() => server.listen())
+  beforeAll(() => server.listen({
+    onUnhandledRequest: 'error'
+  }))
   afterEach(() => server.resetHandlers())
   afterAll(() => server.close())
 
@@ -125,9 +127,13 @@ describe('Webhook FormShare API', () => {
 
       mockReq.body = mockFormShareData;
 
+      // Mock both Memed API and ntfy calls
       server.use(
         http.get('https://gateway.memed.com.br/v2/patient-management/patients/search', () => {
           return HttpResponse.json(mockSearchResults)
+        }),
+        http.post('https://ntfy.sh/drmente-prod-grafqk0d37b5', () => {
+          return HttpResponse.json({ ok: true })
         })
       )
 
@@ -167,6 +173,9 @@ describe('Webhook FormShare API', () => {
       server.use(
         http.get('https://gateway.memed.com.br/v2/patient-management/patients/search', () => {
           return HttpResponse.json(mockEmptyResults)
+        }),
+        http.post('https://ntfy.sh/drmente-prod-grafqk0d37b5', () => {
+          return HttpResponse.json({ ok: true })
         })
       )
 
@@ -217,6 +226,9 @@ describe('Webhook FormShare API', () => {
       server.use(
         http.get('https://gateway.memed.com.br/v2/patient-management/patients/search', () => {
           return HttpResponse.json(mockMultipleResults)
+        }),
+        http.post('https://ntfy.sh/drmente-prod-grafqk0d37b5', () => {
+          return HttpResponse.json({ ok: true })
         })
       )
 
