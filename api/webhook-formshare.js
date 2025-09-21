@@ -56,7 +56,17 @@ async function findPatientOrCreate(personalData, memedClient) {
   if (patient.data.length === 1) {
     return patient.data[0];
   }
-  return null;
+  const newPatient = await memedClient.createPatient({
+    full_name: personalData.name,
+    cpf: personalData.cpf,
+    email: personalData.email,
+    phone: personalData.phone
+  });
+  await memedClient.createPatientAnnotation({
+    content: `Paciente criado por integração`,
+    patient_id: newPatient.id
+  });
+  return newPatient;
 }
 async function handlePatient(patient, personalData, formShareData, memedClient) {
   await sendNtfy(`Paciente encontrado em Memed: ${patient.full_name} para ${personalData.name}, CPF: ${personalData.cpf}`);
@@ -90,7 +100,8 @@ async function handler(req, res) {
     return res.status(200).json({
       success: true,
       message: "Webhook processed successfully",
-      foundPatient: Boolean(patient)
+      foundPatient: Boolean(patient),
+      patientId: patient?.id
     });
   } catch (error) {
     console.error("Error processing FormShare webhook:", error);

@@ -1,8 +1,6 @@
 export interface FormShareQuestion {
   id: string;
   type: 'name' | 'phone' | 'email' | 'text' | 'select'
-  | 'cpf'       // ??
-  | 'birthdate'; // ??
   question: string;
   answer: string;
 }

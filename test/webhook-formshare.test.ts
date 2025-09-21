@@ -4,6 +4,7 @@ import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
 import type { Paginated, Patient } from 'memed-sdk/src';
 import handler from '../src-api/webhook-formshare/index';
+import type { FormShareResponse } from '../src-api/webhook-formshare/formshare';
 
 const server = setupServer()
 
@@ -85,10 +86,12 @@ describe('Webhook FormShare API', () => {
   });
 
   describe('Successful webhook processing', () => {
-    it('should process webhook with valid FormShare data', async () => {
-      const mockFormShareData = {
+    it('should handle patient found', async () => {
+      const mockFormShareData: FormShareResponse = {
         formId: 'form_cmfly6p6q0003ob39pv5mvisq',
         formName: 'Pré consulta 2',
+        formUrl: 'https://formshare.ai/forms/r/cmfly6p6q0003ob39pv5mvisq',
+        createdAt: '2025-01-01',
         submissionId: 'submission_a7j6oilfeoildewktlzg69o2',
         data: [
           {
@@ -108,6 +111,12 @@ describe('Webhook FormShare API', () => {
             type: 'email',
             question: 'Qual é seu email?',
             answer: 'joao@gmail.com'
+          },
+          {
+            id: 'question_xqbf8zwi77129anpswt3op9o',
+            type: 'text',
+            question: 'Qual é seu CPF?',
+            answer: '12345678900'
           }
         ]
       };
@@ -117,7 +126,8 @@ describe('Webhook FormShare API', () => {
           {
             id: 'patient-123',
             full_name: 'João Silva',
-            email: 'joao@gmail.com'
+            email: 'joao@gmail.com',
+            cpf: '12345678900'
           }
         ],
         current_page: 1,
@@ -146,7 +156,87 @@ describe('Webhook FormShare API', () => {
       expect(mockJsonResponse).toHaveBeenCalledWith({
         success: true,
         message: 'Webhook processed successfully',
-        foundPatient: true
+        patientId: 'patient-123',
+        foundPatient: true,
+      });
+    });
+
+    it('should handle patient found but with wrong CPF', async () => {
+      const mockFormShareData: FormShareResponse = {
+        formId: 'form_cmfly6p6q0003ob39pv5mvisq',
+        formName: 'Pré consulta 2',
+        formUrl: 'https://formshare.ai/forms/r/cmfly6p6q0003ob39pv5mvisq',
+        createdAt: '2025-01-01',
+        submissionId: 'submission_a7j6oilfeoildewktlzg69o2',
+        data: [
+          {
+            id: 'question_ptcpefw1ljuhnx7niz5iys6x',
+            type: 'name',
+            question: 'Qual é o seu nome?',
+            answer: 'João Silva'
+          },
+          {
+            id: 'question_j0gdviy7b657lwnyoq93rgxv',
+            type: 'phone',
+            question: 'Qual é seu telefone?',
+            answer: '+55 31 98312222'
+          },
+          {
+            id: 'question_xqbf8zwi77129anpswt3op9o',
+            type: 'email',
+            question: 'Qual é seu email?',
+            answer: 'joao@gmail.com'
+          },
+          {
+            id: 'question_xqbf8zwi77129anpswt3op9o',
+            type: 'text',
+            question: 'Qual é seu CPF?',
+            answer: '12345678900'
+          }
+        ]
+      };
+
+      const mockSearchResults: Paginated<Partial<Patient>> = {
+        data: [
+          {
+            id: 'patient-123',
+            full_name: 'João Silva',
+            email: 'joao@gmail.com',
+            cpf: '98765432100'
+          }
+        ],
+        current_page: 1,
+        per_page: 10,
+        total_items: 1
+      };
+
+      mockReq.body = mockFormShareData;
+
+      // Mock both Memed API and ntfy calls
+      server.use(
+        http.get('https://gateway.memed.com.br/v2/patient-management/patients/search', () => {
+          return HttpResponse.json(mockSearchResults)
+        }),
+        // in the case the response is a person that exists but cpf doesn't match the one sent, we should create a new one
+        http.post('https://gateway.memed.com.br/v2/patient-management/patients', () => {
+          return HttpResponse.json({ id: 'patient-created-123' })
+        }),
+        http.post('https://gateway.memed.com.br/v2/patient-management/patients-annotations', () => {
+          return HttpResponse.json({ ok: true })
+        }),
+        http.post('https://ntfy.sh/drmente-prod-grafqk0d37b5', () => {
+          return HttpResponse.json({ ok: true })
+        })
+      )
+
+      await handler(mockReq as VercelRequest, mockRes as VercelResponse);
+
+      expect(mockStatus).toHaveBeenCalledWith(200);
+      expect(mockJsonResponse).toHaveBeenCalledWith({
+        success: true,
+        message: 'Webhook processed successfully',
+        patientId: 'patient-created-123',
+        foundPatient: true,
       });
     });
 
@@ -177,6 +267,12 @@ describe('Webhook FormShare API', () => {
         http.get('https://gateway.memed.com.br/v2/patient-management/patients/search', () => {
           return HttpResponse.json(mockEmptyResults)
         }),
+        http.post('https://gateway.memed.com.br/v2/patient-management/patients', () => {
+          return HttpResponse.json({ id: 'patient-created-123' })
+        }),
+        http.post('https://gateway.memed.com.br/v2/patient-management/patients-annotations', () => {
+          return HttpResponse.json({ ok: true })
+        }),
         http.post('https://ntfy.sh/drmente-prod-grafqk0d37b5', () => {
           return HttpResponse.json({ ok: true })
         })
@@ -188,7 +284,8 @@ describe('Webhook FormShare API', () => {
       expect(mockJsonResponse).toHaveBeenCalledWith({
         success: true,
         message: 'Webhook processed successfully',
-        foundPatient: false
+        patientId: 'patient-created-123',
+        foundPatient: true
       });
     });
 
@@ -235,12 +332,21 @@ describe('Webhook FormShare API', () => {
         })
       )
 
+      const requests: string[] = [];
+      server.events.on('request:start', async (ctx) => {
+        requests.push(ctx.request.url)
+        // console.log('requests', await ctx.request.json());
+      })
+
       await handler(mockReq as VercelRequest, mockRes as VercelResponse);
+
+      expect(requests.filter(p => p.includes('ntfy'))).toHaveLength(3); // resposta recebida, mais de um encontrado, não encontrado
 
       expect(mockStatus).toHaveBeenCalledWith(200);
       expect(mockJsonResponse).toHaveBeenCalledWith({
         success: true,
         message: 'Webhook processed successfully',
+        patientId: undefined,
         foundPatient: false
       });
     });
