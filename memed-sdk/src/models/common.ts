@@ -6,8 +6,11 @@ export interface RequestOptions {
   headers?: Record<string, string>;
 }
 
-export interface Paginated<T> {
-  data: T[];
+export interface Response<T> {
+  data: T;
+}
+
+export interface Paginated<T> extends Response<T[]> {
   current_page: number;
   per_page: number;
   total_items: number;

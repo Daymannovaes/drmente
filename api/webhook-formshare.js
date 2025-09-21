@@ -1,4 +1,4 @@
-import { a as auth, M as MemedClient } from "./auth-aSfrURnt.js";
+import { a as auth, M as MemedClient } from "./auth-79TuYYWA.js";
 function getAnswersByType(response, type) {
   return response.data.filter((q) => q.type === type).map((q) => q.answer);
 }
@@ -48,25 +48,25 @@ function validate(req, res) {
   return true;
 }
 async function findPatientOrCreate(personalData, memedClient) {
-  const patient = await memedClient.searchPatients({ filter: personalData.cpf || personalData.name, size: 10, page: 1 });
-  if (patient.data.length > 1) {
-    await sendNtfy(`Mais de um paciente encontrado em Memed (${patient.data.length}) para ${personalData.name}, CPF: ${personalData.cpf}`);
-    return null;
-  }
-  if (patient.data.length === 1) {
-    return patient.data[0];
+  const patient = personalData.cpf ? await memedClient.findPatientByCpf(personalData.cpf) : null;
+  if (patient) {
+    return patient;
   }
   const newPatient = await memedClient.createPatient({
     full_name: personalData.name,
     cpf: personalData.cpf,
     email: personalData.email,
-    phone: personalData.phone
+    phone: personalData.phone,
+    use_social_name: false,
+    social_name: "",
+    without_cpf: false
   });
+  console.log("newPatient", newPatient);
   await memedClient.createPatientAnnotation({
     content: `Paciente criado por integração`,
-    patient_id: newPatient.id
+    patient_id: newPatient.data.id
   });
-  return newPatient;
+  return newPatient.data;
 }
 async function handlePatient(patient, personalData, formShareData, memedClient) {
   await sendNtfy(`Paciente encontrado em Memed: ${patient.full_name} para ${personalData.name}, CPF: ${personalData.cpf}`);
@@ -105,6 +105,7 @@ async function handler(req, res) {
     });
   } catch (error) {
     console.error("Error processing FormShare webhook:", error);
+    console.error(JSON.stringify(error.response, null, 2));
     return res.status(500).json({
       error: "Internal server error",
       message: "Failed to process webhook"

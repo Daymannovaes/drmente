@@ -1,5 +1,5 @@
 import { buildUrl, requestJSON } from "./http.js";
-import type { RequestOptions, Paginated } from "./models/common.js";
+import type { RequestOptions, Paginated, Response } from "./models/common.js";
 import type { PatientCreate, Patient, PatientSearchParams, PatientAnnotationCreate, PatientAnnotation } from "./models/patient.js";
 
 export interface MemedClientOptions {
@@ -25,9 +25,9 @@ export class MemedClient {
   }
 
   /** Create a patient (POST /v2/patient-management/patients) */
-  async createPatient(patient: PatientCreate, opts: RequestOptions = {}): Promise<Patient> {
+  async createPatient(patient: PatientCreate, opts: RequestOptions = {}): Promise<Response<Patient>> {
     const url = buildUrl(this.baseURL, "/v2/patient-management/patients");
-    return requestJSON<Patient>(url, {
+    return requestJSON<Response<Patient>>(url, {
       method: "POST",
       signal: opts.signal,
       headers: { ...this.defaultHeaders, ...(opts.headers ?? {}), "x-token": this.token },
@@ -35,9 +35,9 @@ export class MemedClient {
     });
   }
 
-  async createPatientAnnotation(annotation: PatientAnnotationCreate, opts: RequestOptions = {}): Promise<PatientAnnotation> {
+  async createPatientAnnotation(annotation: PatientAnnotationCreate, opts: RequestOptions = {}): Promise<Response<PatientAnnotation>> {
     const url = buildUrl(this.baseURL, `/v2/patient-management/patients-annotations`);
-    return requestJSON<PatientAnnotation>(url, {
+    return requestJSON<Response<PatientAnnotation>>(url, {
       method: "POST",
       signal: opts.signal,
       headers: { ...this.defaultHeaders, ...(opts.headers ?? {}), "x-token": this.token },
@@ -56,5 +56,12 @@ export class MemedClient {
       signal: opts.signal,
       headers: { ...this.defaultHeaders, ...(opts.headers ?? {}), "x-token": this.token },
     });
+  }
+
+  /** Find a patient by CPF (GET /v2/patient-management/patients/search) */
+  async findPatientByCpf(cpf: string, opts: RequestOptions = {}): Promise<Patient | null> {
+    const patients = await this.searchPatients({ filter: cpf, size: 10, page: 1 }, opts);
+
+    return patients.data.find(patient => patient.cpf === cpf) || null;
   }
 }

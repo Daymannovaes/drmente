@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterAll, afterEach, beforeAll } 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
-import type { Paginated, Patient } from 'memed-sdk/src';
+import type { Paginated, Patient, PatientAnnotation, Response } from 'memed-sdk/src';
 import handler from '../src-api/webhook-formshare/index';
 import type { FormShareResponse } from '../src-api/webhook-formshare/formshare';
 
@@ -219,10 +219,10 @@ describe('Webhook FormShare API', () => {
         }),
         // in the case the response is a person that exists but cpf doesn't match the one sent, we should create a new one
         http.post('https://gateway.memed.com.br/v2/patient-management/patients', () => {
-          return HttpResponse.json({ id: 'patient-created-123' })
+          return HttpResponse.json<Response<Partial<Patient>>>({ data: { id: 'patient-created-123' } })
         }),
         http.post('https://gateway.memed.com.br/v2/patient-management/patients-annotations', () => {
-          return HttpResponse.json({ ok: true })
+          return HttpResponse.json<Response<Partial<PatientAnnotation>>>({ data: { id: 'patient-annotation-created-123' } })
         }),
         http.post('https://ntfy.sh/drmente-prod-grafqk0d37b5', () => {
           return HttpResponse.json({ ok: true })
@@ -268,10 +268,10 @@ describe('Webhook FormShare API', () => {
           return HttpResponse.json(mockEmptyResults)
         }),
         http.post('https://gateway.memed.com.br/v2/patient-management/patients', () => {
-          return HttpResponse.json({ id: 'patient-created-123' })
+          return HttpResponse.json<Response<Partial<Patient>>>({ data: { id: 'patient-created-123' } })
         }),
         http.post('https://gateway.memed.com.br/v2/patient-management/patients-annotations', () => {
-          return HttpResponse.json({ ok: true })
+          return HttpResponse.json<Response<Partial<PatientAnnotation>>>({ data: { id: 'patient-annotation-created-123' } })
         }),
         http.post('https://ntfy.sh/drmente-prod-grafqk0d37b5', () => {
           return HttpResponse.json({ ok: true })
@@ -286,68 +286,6 @@ describe('Webhook FormShare API', () => {
         message: 'Webhook processed successfully',
         patientId: 'patient-created-123',
         foundPatient: true
-      });
-    });
-
-    it('should handle multiple patients found', async () => {
-      const mockFormShareData = {
-        formId: 'form_cmfly6p6q0003ob39pv5mvisq',
-        submissionId: 'submission_a7j6oilfeoildewktlzg69o2',
-        data: [
-          {
-            id: 'question_ptcpefw1ljuhnx7niz5iys6x',
-            type: 'name',
-            question: 'Qual é o seu nome?',
-            answer: 'João Silva'
-          }
-        ]
-      };
-
-      const mockMultipleResults: Paginated<Partial<Patient>> = {
-        data: [
-          {
-            id: 'patient-123',
-            full_name: 'João Silva',
-            email: 'joao@gmail.com'
-          },
-          {
-            id: 'patient-456',
-            full_name: 'João Silva Santos',
-            email: 'joao.santos@gmail.com'
-          }
-        ],
-        current_page: 1,
-        per_page: 10,
-        total_items: 2
-      };
-
-      mockReq.body = mockFormShareData;
-
-      server.use(
-        http.get('https://gateway.memed.com.br/v2/patient-management/patients/search', () => {
-          return HttpResponse.json(mockMultipleResults)
-        }),
-        http.post('https://ntfy.sh/drmente-prod-grafqk0d37b5', () => {
-          return HttpResponse.json({ ok: true })
-        })
-      )
-
-      const requests: string[] = [];
-      server.events.on('request:start', async (ctx) => {
-        requests.push(ctx.request.url)
-        // console.log('requests', await ctx.request.json());
-      })
-
-      await handler(mockReq as VercelRequest, mockRes as VercelResponse);
-
-      expect(requests.filter(p => p.includes('ntfy'))).toHaveLength(3); // resposta recebida, mais de um encontrado, não encontrado
-
-      expect(mockStatus).toHaveBeenCalledWith(200);
-      expect(mockJsonResponse).toHaveBeenCalledWith({
-        success: true,
-        message: 'Webhook processed successfully',
-        patientId: undefined,
-        foundPatient: false
       });
     });
   });

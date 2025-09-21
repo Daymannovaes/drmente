@@ -78,6 +78,11 @@ class MemedClient {
       headers: { ...this.defaultHeaders, ...opts.headers ?? {}, "x-token": this.token }
     });
   }
+  /** Find a patient by CPF (GET /v2/patient-management/patients/search) */
+  async findPatientByCpf(cpf, opts = {}) {
+    const patients = await this.searchPatients({ filter: cpf, size: 10, page: 1 }, opts);
+    return patients.data.find((patient) => patient.cpf === cpf) || null;
+  }
 }
 function auth(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");

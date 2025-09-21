@@ -1,10 +1,10 @@
 export interface PatientCreate {
   full_name: string;
   cpf?: string;
-  use_social_name?: boolean;
+  use_social_name: boolean;
   social_name?: string | null;
   birthdate?: string; // YYYY-MM-DD
-  without_cpf?: boolean;
+  without_cpf: boolean;
   gender_identity_id?: number | null;
   phone?: string | null;
   email?: string | null;
@@ -19,11 +19,9 @@ export interface Patient extends PatientCreate {
   patient_legacy_id: number;
   doctor_legacy_id: number;
   rg?: string
-  use_social_name: boolean;
   birthdate: string;
   is_mother_unknown: boolean;
   mother_name?: string
-  without_cpf: boolean;
   phone_type_id: number;
   address: PatientAddress;
   emergency_contacts: unknown[];
