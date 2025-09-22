@@ -12,12 +12,9 @@
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1358024049025263');
     fbq('track', 'PageView');
-  </script>
 
-  <script>
-    window.addEventListener('load', function () {
-      fbq('track', 'Lead');
-    });
+    fbq('track', 'Lead');
+    fbq('trackCustom', 'CompletedForm');
   </script>
   <meta name="facebook-domain-verification" content="lb3mkgfapxrjap6h1faiytcyrlghdm" />
 
