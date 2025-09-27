@@ -1,0 +1,118 @@
+{
+  "formId": "form_cmfly6p6q0003ob39pv5mvisq",
+  "formName": "Pré consulta 2",
+  "formUrl": "formshare.ai/r/9xrRzauoSk",
+  "submissionId": "submission_a7j6oilfeoildewktlzg69o2",
+  "createdAt": "2025-09-17T02:00:49.177Z",
+  "data":
+    [
+      {
+        "id": "question_ptcpefw1ljuhnx7niz5iys6x",
+        "type": "name",
+        "question": "Olá! Que bom que você está aqui. Vamos começar a renovar sua prescrição. Primeiro, qual é o seu nome?",
+        "answer": "jorge2"
+      },
+      {
+        "id": "question_j0gdviy7b657lwnyoq93rgxv",
+        "type": "phone",
+        "question": "Ótimo, Jorge! Agora, por favor, me informe seu telefone para contato?",
+        "answer": "+55 31 98312222"
+      },
+      {
+        "id": "question_xqbf8zwi77129anpswt3op9o",
+        "type": "email",
+        "question": "Obrigado, Jorge! Agora, poderia me fornecer seu email para contato?",
+        "answer": "jorge@gmail.com"
+      },
+      {
+        "id": "question_wfy8ngnwccg9obh6tpqqaa0d",
+        "type": "text",
+        "question": "Perfeito, recebi seu email! Qual é o principal motivo para renovar sua prescrição hoje? (ex.: continuar o tratamento, falta de disponibilidade de médico, conveniência etc.)",
+        "answer": "renovar consulta"
+      },
+      {
+        "id": "question_jhqcncreu75ppl0ho34isra5",
+        "type": "text",
+        "question": "Entendi, você gostaria de renovar a consulta. Agora, qual diagnóstico seu médico forneceu para a sua condição?",
+        "answer": "ansiedade"
+      },
+      {
+        "id": "question_iy6rhgtlgka5xpvcq0ktt9c5",
+        "type": "text",
+        "question": "Ótimo, ansiedade. Qual medicamento você está utilizando atualmente? (Isto é importante para determinar se se trata de antidepressivos/ansiolíticos que exigem receita azul ou amarela.)",
+        "answer": "antidepressivo"
+      },
+      {
+        "id": "question_exs9iibpwueppmfmho0f9e4s",
+        "type": "select",
+        "question": "Há quanto tempo você está utilizando esse medicamento? (Menos de 1 mês / 1–6 meses / mais de 6 meses)",
+        "answer": "mais de 6 meses"
+      },
+      {
+        "id": "question_m41zszi1k7r7dutwvfh885gd",
+        "type": "text",
+        "question": "Como você tem se sentido nos últimos dias?",
+        "answer": "bem"
+      },
+      {
+        "id": "question_p4kaevqzp5mqlrr18nv8yb1x",
+        "type": "select",
+        "question": "Que bom saber que você está se sentindo bem! Você tem feito consultas médicas regulares ou apenas renova suas prescrições?",
+        "answer": "Apenas renovações"
+      },
+      {
+        "id": "question_hw08qa2f25t0hlprba48awvr",
+        "type": "select",
+        "question": "Nos últimos 60 dias, como você avaliaria seus sintomas de forma geral? (Melhoraram significativamente / Estáveis / Pioraram)",
+        "answer": "Estáveis"
+      },
+      {
+        "id": "question_q1o24bl1c2zj6lpe1jhnz8wp",
+        "type": "select",
+        "question": "Você já foi diagnosticado com transtorno bipolar, esquizofrenia, transtorno de personalidade borderline ou outra condição psiquiátrica grave? (Sim / Não)",
+        "answer": "Não"
+      },
+      {
+        "id": "question_e5fpgagkt9hmqdr2l2ea2gba",
+        "type": "select",
+        "question": "Teve pensamentos de automutilação ou suicídio nos últimos meses? (Sim / Não)",
+        "answer": "Não"
+      },
+      {
+        "id": "question_pj7cmnwpb5et6be2gkjb9i47",
+        "type": "select",
+        "question": "Foi hospitalizado por razões psiquiátricas nos últimos 12 meses? (Sim / Não)",
+        "answer": "Não"
+      },
+      {
+        "id": "question_gn55twms5kqm4arnd9fgvryd",
+        "type": "select",
+        "question": "Está utilizando atualmente algum medicamento controlado (ex.: clonazepam, alprazolam, diazepam)? (Sim / Não)",
+        "answer": "Não"
+      },
+      {
+        "id": "question_v9l2hvhnd9ufhzp51xpqd6mi",
+        "type": "select",
+        "question": "Você está satisfeito com seu tratamento atual ou sente que algo precisa mudar? (Satisfeito / Gostaria de mudar)",
+        "answer": "Satisfeito"
+      },
+      {
+        "id": "question_s6n02jad2ix31jptdvqqgr8y",
+        "type": "select",
+        "question": "Seu único objetivo aqui é renovar a prescrição do medicamento que já está usando? (Sim / Não)",
+        "answer": "Sim"
+      },
+      {
+        "id": "question_agosx3faqydh9uteajo6k9xd",
+        "type": "select",
+        "question": "Pode fornecer uma cópia da sua última receita ou da embalagem do medicamento? (Sim / Não)",
+        "answer": "Sim"
+      },
+      {
+        "id": "question_ib64g1glwdtb2dempzdh0wr6",
+        "type": "select",
+        "question": "Você entende que este serviço é apenas para renovação de prescrições em andamento e não substitui um acompanhamento médico completo? (Sim / Não)",
+        "answer": "Sim"
+      }
+    ]
+}
