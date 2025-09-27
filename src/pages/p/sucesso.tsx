@@ -22,7 +22,7 @@ export default function Sucesso() {
   // Track conversion events once
   useEffect(() => {
     fbq.trackLead();
-    fbq.trackCustom('lp1-completed-form');
+    fbq.trackCustom('lp1-payment-success');
   }, []);
 
   return (
