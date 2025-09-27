@@ -28,7 +28,9 @@ export default function PagamentoSucesso() {
           clearInterval(interval);
           // Redirect after progress completes
           setTimeout(() => {
-            window.location.href = 'https://buy.stripe.com/8x228q4U9foG3ked9G1ZS08';
+            if (process.env.NODE_ENV !== 'development') {
+              window.location.href = 'https://buy.stripe.com/8x228q4U9foG3ked9G1ZS08';
+            }
           }, 500);
           return 100;
         }

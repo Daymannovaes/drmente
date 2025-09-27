@@ -4,6 +4,7 @@ import type { FormShareResponse, PersonalData } from './formshare';
 import { extractPersonalData } from './formshare';
 import { sendNtfy } from './ntfy';
 import { MemedClient, MemedError, type Patient } from '@/memed-sdk';
+import { jsonToSimpleHtml } from './json-to-html';
 
 function validate(req: VercelRequest, res: VercelResponse): boolean {
   // Only allow POST method for webhooks
@@ -61,7 +62,7 @@ async function createPatientAnnotation(patient: Patient, personalData: PersonalD
 Resposta recebida no formulário para ${personalData.name}. Veja em https://formshare.ai/forms/r/${formShareData.formId}
 
 Resposta do formulário:
-${JSON.stringify(formShareData, null, 2)}
+${jsonToSimpleHtml(formShareData)}
 `,
       patient_id: patient.id
     });
