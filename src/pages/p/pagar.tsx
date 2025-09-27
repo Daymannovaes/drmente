@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
-import Link from "next/link";
 import Footer from "@/components/Footer";
-import { fbq } from "@/utils/fbq";
+import { analytics } from "@/utils/analytics";
+import { redirect } from "@/utils/redirect";
 
 export default function PagamentoSucesso() {
   const [progress, setProgress] = useState(0);
@@ -16,8 +16,8 @@ export default function PagamentoSucesso() {
 
   // Track conversion events once
   useEffect(() => {
-    fbq.trackLead();
-    fbq.trackCustom('lp1-completed-form');
+    analytics.trackLead();
+    analytics.trackCustom('lp1-completed-form');
   }, []);
 
   useEffect(() => {
@@ -28,8 +28,9 @@ export default function PagamentoSucesso() {
           clearInterval(interval);
           // Redirect after progress completes
           setTimeout(() => {
+            analytics.trackCustom('lp1-redirecting-to-payment');
             if (process.env.NODE_ENV !== 'development') {
-              window.location.href = 'https://buy.stripe.com/8x228q4U9foG3ked9G1ZS08';
+              redirect('https://buy.stripe.com/8x228q4U9foG3ked9G1ZS08');
             }
           }, 500);
           return 100;
@@ -83,14 +84,12 @@ export default function PagamentoSucesso() {
         {/* Header */}
         <header className="w-full border-b border-slate-200 bg-white sticky top-0 z-30" role="banner">
           <nav className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between" aria-label="Principal">
-            <Link href="/" className="flex items-center gap-2" aria-label="Página inicial">
-              <svg className="h-8 w-8" viewBox="0 0 24 24" role="img" aria-label="Logotipo: cruz médica" xmlns="http://www.w3.org/2000/svg">
-                <title>DrMente</title>
-                <rect x="3" y="3" width="18" height="18" rx="4" fill="#1d4ed8"></rect>
-                <path d="M12 7v10M7 12h10" stroke="white" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-              <span className="font-semibold tracking-tight">DrMente</span>
-            </Link>
+            <svg className="h-8 w-8" viewBox="0 0 24 24" role="img" aria-label="Logotipo: cruz médica" xmlns="http://www.w3.org/2000/svg">
+              <title>DrMente</title>
+              <rect x="3" y="3" width="18" height="18" rx="4" fill="#1d4ed8"></rect>
+              <path d="M12 7v10M7 12h10" stroke="white" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+            <span className="font-semibold tracking-tight">DrMente</span>
             <div className="flex items-center gap-3">
               <a href="#faq" className="text-sm hover:underline">FAQ</a>
               <a href="#contato" className="text-sm hover:underline">Contato</a>
@@ -137,7 +136,7 @@ export default function PagamentoSucesso() {
                 {/* Payment Button (as fallback) */}
                 <div className="mt-8">
                   <button
-                    onClick={() => window.open('https://buy.stripe.com/8x228q4U9foG3ked9G1ZS08', '_blank')}
+                    onClick={() => redirect('https://buy.stripe.com/8x228q4U9foG3ked9G1ZS08', true)}
                     className="inline-flex items-center rounded-xl bg-green-600 px-8 py-4 text-white font-semibold shadow-lg hover:bg-green-700 focus:outline-none focus-visible:ring-4 focus-visible:ring-green-300 transition-all duration-300 hover:scale-105 hover:shadow-xl"
                     aria-label="Finalizar pagamento"
                   >

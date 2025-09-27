@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
-import { fbq } from "@/utils/fbq";
+import { analytics } from "@/utils/analytics";
 import Footer from "@/components/Footer";
 
 export default function Sucesso() {
@@ -21,8 +21,8 @@ export default function Sucesso() {
 
   // Track conversion events once
   useEffect(() => {
-    fbq.trackLead();
-    fbq.trackCustom('lp1-payment-success');
+    analytics.trackLead();
+    analytics.trackCustom('lp1-payment-success');
   }, []);
 
   return (

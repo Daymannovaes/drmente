@@ -1,3 +1,5 @@
+import posthog from "posthog-js";
+
 // Facebook Pixel utility functions
 declare global {
   interface Window {
@@ -5,7 +7,7 @@ declare global {
   }
 }
 
-export const fbq = {
+export const analytics = {
   // Track page view
   trackPageView: () => {
     if (typeof window !== 'undefined' && window.fbq) {
@@ -18,6 +20,7 @@ export const fbq = {
     if (typeof window !== 'undefined' && window.fbq) {
       window.fbq('track', 'Lead');
     }
+    posthog.capture('lead');
   },
 
   // Track custom events
@@ -25,5 +28,6 @@ export const fbq = {
     if (typeof window !== 'undefined' && window.fbq) {
       window.fbq('trackCustom', eventName, params);
     }
+    posthog.capture(eventName, params);
   },
 };

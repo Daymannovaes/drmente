@@ -1,0 +1,63 @@
+{
+  "formId": "form_cmg2bja52001p7x83rlqkq8lq",
+  "formName": "Pré Consulta (ativo)",
+  "formUrl": "formshare.ai/s/Vkz3Dx3jE8",
+  "submissionId": "submission_cxdsvpb8sqjuxf2o09betwep",
+  "createdAt": "2025-09-27T19:02:49.962Z",
+  "data": [
+    {
+      "id": "question_u779ttjdcnsac49w51zeppz8",
+      "type": "name",
+      "question": "Olá! Vamos começar. Qual é o seu primeiro nome?",
+      "answer": "dayman"
+    },
+    {
+      "id": "question_miy92o9es1dy49nnbthptkpt",
+      "type": "select",
+      "question": "Ótimo, Dayman! Você entende que este serviço é apenas para renovação de receita?",
+      "answer": "Sim"
+    },
+    {
+      "id": "question_uvwm2esjxl7jc85iymo02jgc",
+      "type": "text",
+      "question": "Qual medicamento e dose você usa e deseja receita?",
+      "answer": "esc 2mg"
+    },
+    {
+      "id": "question_zwxilged6v3qsowsrsaxr0zh",
+      "type": "text",
+      "question": "Qual diagnóstico você recebeu do seu médico para uso desse medicamento?",
+      "answer": "dor"
+    },
+    {
+      "id": "question_t6zu7xhtknl9wy2wdnfksod7",
+      "type": "select",
+      "question": "Há quanto tempo você usa esse medicamento de forma contínua?",
+      "answer": "Mais de 3 meses"
+    },
+    {
+      "id": "question_ngwlkxbgdiq3tvmctt18kanr",
+      "type": "select",
+      "question": "Como você tem se sentido nas últimas semanas em relação aos sintomas?",
+      "answer": "Bem, sem sintomas relevantes"
+    },
+    {
+      "id": "question_uup7ifrw3wj2gwztuozn0kok",
+      "type": "select",
+      "question": "Teve algum destes nos últimos meses? (Não/Sim)\n\n- Pensamentos de suicídio\n\n- Crises graves ou necessidade de pronto-socorro\n\n- Hospitalização psiquiátrica\n\n- Uso diário de clonazepam, alprazolam ou diazepam\n\n- Diagnóstico de bipolaridade, esquizofrenia ou transtorno borderline\n\n- Abuso de álcool ou drogas",
+      "answer": "Não"
+    },
+    {
+      "id": "question_v0z0w1i9jlh5d09y5t10jzkr",
+      "type": "select",
+      "question": "Você está satisfeito com seu tratamento atual ou deseja uma consulta médica completa?",
+      "answer": "Satisfeito"
+    },
+    {
+      "id": "question_v0z0w1i9jlh5d09y5t10jzkr",
+      "type": "text",
+      "question": "Qual seu telefone?",
+      "answer": "31 987417227"
+    }
+  ]
+}

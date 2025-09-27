@@ -1,11 +1,12 @@
 import Head from "next/head";
-import { fbq } from "@/utils/fbq";
+import { analytics } from "@/utils/analytics";
 import Footer from "@/components/Footer";
+import { redirect } from "@/utils/redirect";
 
 export default function Home() {
   function handleCTAClick() {
-    fbq.trackCustom('lp1-clicked-form');
-    window.open('https://formshare.ai/s/Vkz3Dx3jE8', '_blank');
+    analytics.trackCustom('lp1-clicked-form');
+    redirect('https://formshare.ai/s/Vkz3Dx3jE8', true);
   }
 
   return (
