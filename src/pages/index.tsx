@@ -1,13 +1,84 @@
 import Head from "next/head";
+import { useEffect, useState } from "react";
 import { analytics } from "@/utils/analytics";
 import Footer from "@/components/Footer";
 import { redirect } from "@/utils/redirect";
+import posthog from "posthog-js";
+
+function handleCTAClick() {
+  analytics.trackCustom('lp1-clicked-form');
+  redirect('https://formshare.ai/s/Vkz3Dx3jE8', true);
+}
+
+function renderHeroSectionWithPrice() {
+  return (
+    <section className="hero-bg pt-20 pb-16" role="banner" style={{
+      background: "linear-gradient(to bottom right, hsl(35 60% 95%), hsl(0 0% 100%), #b1c4ec)"
+    }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-4xl mx-auto">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 mt-10 leading-tight">
+            Renove sua receita médica sem sair de casa
+          </h1>
+          <p className="text-xl sm:text-2xl text-gray-700 mb-6 max-w-2xl mx-auto">
+            Processo 100% online, seguro e regulamentado. Receba em até 24 horas.
+          </p>
+          <div className="mb-8">
+            <div className="inline-flex items-center bg-white rounded-lg px-6 py-3 shadow-md border border-gray-200">
+              <span className="text-3xl font-bold text-blue-600 mr-2">R$ 89</span>
+              <span className="text-gray-600">por receita</span>
+              <span className="ml-4 text-sm text-green-600 font-semibold">✓ Economize até R$ 300+</span>
+            </div>
+          </div>
+          <button onClick={handleCTAClick} className="bg-blue-600 text-white px-8 py-4 text-lg font-semibold rounded-lg hover:bg-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg focus-visible" aria-label="Renovar receita médica agora">
+            Renovar Minha Receita
+          </button>
+          <p className="text-sm text-gray-600 mt-4">
+            ✓ Regulamentado pelo CFM • ✓ Aceito em todas as farmácias
+          </p>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function renderHeroSection() {
+  return (
+    <section className="hero-bg pt-20 pb-16" role="banner" style={{
+      background: "linear-gradient(to bottom right, hsl(35 60% 95%), hsl(0 0% 100%), #b1c4ec)"
+    }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-4xl mx-auto">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 mt-10 leading-tight">
+            Renove sua receita médica sem sair de casa
+          </h1>
+          <p className="text-xl sm:text-2xl text-gray-700 mb-8 max-w-2xl mx-auto">
+            Processo 100% online, seguro e regulamentado. Receba em até 24 horas.
+          </p>
+          <button onClick={handleCTAClick} className="bg-blue-600 text-white px-8 py-4 text-lg font-semibold rounded-lg hover:bg-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg focus-visible" aria-label="Renovar receita médica agora">
+            Renovar Minha Receita
+          </button>
+          <p className="text-sm text-gray-600 mt-4">
+            ✓ Regulamentado pelo CFM • ✓ Aceito em todas as farmácias
+          </p>
+        </div>
+      </div>
+    </section>
+  )
+}
 
 export default function Home() {
-  function handleCTAClick() {
-    analytics.trackCustom('lp1-clicked-form');
-    redirect('https://formshare.ai/s/Vkz3Dx3jE8', true);
-  }
+  const [heroWithPrice, setHeroWithPrice] = useState(false);
+
+  useEffect(() => {
+    posthog.onFeatureFlags(() => {
+      if (posthog.isFeatureEnabled('lp1-with-price') ) {
+        setHeroWithPrice(true);
+      } else {
+        setHeroWithPrice(false);
+      }
+    })
+  }, []);
 
   return (
     <>
@@ -118,26 +189,7 @@ export default function Home() {
         </nav>
 
         {/* Hero Section */}
-        <section className="hero-bg pt-20 pb-16" role="banner" style={{
-          background: "linear-gradient(to bottom right, hsl(35 60% 95%), hsl(0 0% 100%), #b1c4ec)"
-        }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-4xl mx-auto">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 mt-10 leading-tight">
-                Renove sua receita médica sem sair de casa
-              </h1>
-              <p className="text-xl sm:text-2xl text-gray-700 mb-8 max-w-2xl mx-auto">
-                Processo 100% online, seguro e regulamentado. Receba em até 24 horas.
-              </p>
-              <button onClick={handleCTAClick} className="bg-blue-600 text-white px-8 py-4 text-lg font-semibold rounded-lg hover:bg-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg focus-visible" aria-label="Renovar receita médica agora">
-                Renovar Minha Receita
-              </button>
-              <p className="text-sm text-gray-600 mt-4">
-                ✓ Regulamentado pelo CFM • ✓ Aceito em todas as farmácias
-              </p>
-            </div>
-          </div>
-        </section>
+        {heroWithPrice ? renderHeroSectionWithPrice() : renderHeroSection()}
 
         {/* Social Proof */}
         <section className="py-16 bg-white" aria-labelledby="social-proof-heading">
