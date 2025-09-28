@@ -15,6 +15,16 @@ export default function PagamentoSucesso() {
     "Redirecionando para o pagamento..."
   ];
 
+
+  const secondsToRedirect = 45;
+
+  function redirectToPayment() {
+    analytics.trackCustom('lp1-redirecting-to-payment');
+    // if (process.env.NODE_ENV !== 'development') {
+      redirect('https://buy.stripe.com/8x228q4U9foG3ked9G1ZS08');
+    // }
+  }
+
   // Track conversion events once
   useEffect(() => {
     analytics.trackLead();
@@ -29,16 +39,13 @@ export default function PagamentoSucesso() {
           clearInterval(interval);
           // Redirect after progress completes
           setTimeout(() => {
-            analytics.trackCustom('lp1-redirecting-to-payment');
-            if (process.env.NODE_ENV !== 'development') {
-              redirect('https://buy.stripe.com/8x228q4U9foG3ked9G1ZS08');
-            }
+            redirectToPayment();
           }, 500);
           return 100;
         }
         return prev + 1;
       });
-    }, 120);
+    }, secondsToRedirect * 10);
 
     return () => clearInterval(interval);
   }, []);
@@ -122,7 +129,7 @@ export default function PagamentoSucesso() {
                 </p>
 
                 {/* Progress Bar Container */}
-                <div className="max-w-md mx-auto mb-8">
+                {/* <div className="max-w-md mx-auto mb-8">
                   <div className="bg-slate-200 rounded-full h-3 overflow-hidden">
                     <div
                       className="bg-gradient-to-r from-blue-500 to-green-500 h-full rounded-full transition-all duration-300 ease-out"
@@ -132,7 +139,7 @@ export default function PagamentoSucesso() {
                   <p className="text-sm text-slate-600 mt-2 transition-all duration-500">
                     {statusTexts[currentText]}
                   </p>
-                </div>
+                </div> */}
 
                 {/* Payment Button (as fallback) */}
                 <div className="mt-8">
