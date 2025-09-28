@@ -26,7 +26,7 @@ function renderHeroSectionWithPrice() {
           </p>
           <div className="mb-8">
             <div className="inline-flex items-center bg-white rounded-lg px-6 py-3 shadow-md border border-gray-200">
-              <span className="text-3xl font-bold text-blue-600 mr-2" style={{minWidth: "86 px"}}>R$ {priceLp1}</span>
+              <span className="text-3xl font-bold text-blue-600 mr-2" style={{ minWidth: 89 }}>R$ {priceLp1}</span>
               <span className="text-gray-600">por receita</span>
               <span className="ml-4 text-sm text-green-600 font-semibold">✓ Economize até R$ 300+</span>
             </div>
