@@ -18,11 +18,16 @@ export default function PagamentoSucesso() {
 
   const secondsToRedirect = 45;
 
-  function redirectToPayment() {
+  function redirectToPayment(newTab: boolean = false) {
     analytics.trackCustom('lp1-redirecting-to-payment');
     // if (process.env.NODE_ENV !== 'development') {
-      redirect('https://buy.stripe.com/8x228q4U9foG3ked9G1ZS08');
+      redirect('https://buy.stripe.com/8x228q4U9foG3ked9G1ZS08', newTab);
     // }
+  }
+
+  function clickToRedirectToPayment() {
+    analytics.trackCustom('lp1-clicked-to-payment');
+    redirectToPayment(true);
   }
 
   // Track conversion events once
@@ -37,9 +42,8 @@ export default function PagamentoSucesso() {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-          // Redirect after progress completes
           setTimeout(() => {
-            redirectToPayment();
+            redirectToPayment(false);
           }, 500);
           return 100;
         }
@@ -144,7 +148,7 @@ export default function PagamentoSucesso() {
                 {/* Payment Button (as fallback) */}
                 <div className="mt-8">
                   <button
-                    onClick={() => redirect('https://buy.stripe.com/8x228q4U9foG3ked9G1ZS08', true)}
+                    onClick={clickToRedirectToPayment}
                     className="inline-flex items-center rounded-xl bg-green-600 px-8 py-4 text-white font-semibold shadow-lg hover:bg-green-700 focus:outline-none focus-visible:ring-4 focus-visible:ring-green-300 transition-all duration-300 hover:scale-105 hover:shadow-xl"
                     aria-label="Finalizar pagamento"
                   >
