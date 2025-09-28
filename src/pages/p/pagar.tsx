@@ -252,9 +252,28 @@ export default function PagamentoSucesso() {
                   </div>
                 </div>
               </div>
-              <p className="mt-6 text-sm text-slate-600">
-                Aviso: este serviço atende à renovação de receitas de ansiedade já diagnosticada. Não substitui consulta completa. A avaliação é individual.
-              </p>
+            </div>
+
+            <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 mt-20 mb-8">
+              {/* CTA Section */}
+              <div className="text-center bg-slate-900 rounded-2xl p-8 text-white">
+                <p className="text-slate-300 mb-6 max-w-2xl mx-auto">
+                  Finalize o pagamento e receba sua receita médica digital em até 24 horas.
+                </p>
+                <button
+                  onClick={clickToRedirectToPayment}
+                  className="inline-flex items-center rounded-xl bg-green-600 px-8 py-4 text-white font-semibold shadow-lg hover:bg-green-700 focus:outline-none focus-visible:ring-4 focus-visible:ring-green-300 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                  aria-label="Emitir receita médica"
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  Emitir Receita - R$ {priceLp1}
+                </button>
+                <p className="text-slate-400 text-sm mt-4">
+                  ✓ Pagamento seguro • ✓ Reembolso garantido se não aprovado
+                </p>
+              </div>
             </div>
           </section>
         </main>
