@@ -3,6 +3,7 @@ import Head from "next/head";
 import Footer from "@/components/Footer";
 import { analytics } from "@/utils/analytics";
 import { redirect } from "@/utils/redirect";
+import { priceLp1 } from "@/utils/lp1";
 
 export default function PagamentoSucesso() {
   const [progress, setProgress] = useState(0);
@@ -117,7 +118,7 @@ export default function PagamentoSucesso() {
                 </h1>
 
                 <p className="text-lg text-slate-700 mb-8 max-w-2xl mx-auto">
-                  Para dar continuidade, para receber sua receita apenas finalize o pagamento a seguir, no valor de <strong className="text-green-600">R$89</strong>.
+                  Para dar continuidade, para receber sua receita apenas finalize o pagamento a seguir, no valor de <strong className="text-green-600">R$ {priceLp1}</strong>.
                 </p>
 
                 {/* Progress Bar Container */}
@@ -143,7 +144,7 @@ export default function PagamentoSucesso() {
                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                     </svg>
-                    Finalizar Pagamento - R$89
+                    Finalizar Pagamento - R$ {priceLp1}
                   </button>
                 </div>
 
@@ -205,6 +206,44 @@ export default function PagamentoSucesso() {
                   <p className="mt-2 text-slate-700">Entre em contato pelo WhatsApp ou email: mente@dr.com</p>
                 </details>
               </div>
+            </div>
+          </section>
+
+          {/* Contato / Confiança */}
+          <section id="contato" aria-labelledby="contato-heading" className="py-12">
+            <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+              <h2 id="contato-heading" className="text-2xl sm:text-3xl font-bold tracking-tight">Precisa falar com a gente?</h2>
+              <div className="mt-6 grid md:grid-cols-3 gap-6">
+                <div className="p-6 rounded-2xl border border-slate-200">
+                  <h3 className="font-semibold">Suporte</h3>
+                  <p className="mt-1 text-slate-700">mente@dr.com</p>
+                  <a href="mailto:mente@dr.com" className="mt-3 inline-flex rounded-lg bg-blue-700 px-4 py-2 text-white font-semibold hover:bg-blue-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300" aria-label="Escrever para o suporte">
+                    Enviar e-mail
+                  </a>
+                </div>
+                <div className="p-6 rounded-2xl border border-slate-200">
+                  <h3 className="font-semibold">WhatsApp</h3>
+                  <p className="mt-1 text-slate-700">Atendimento em horário comercial.</p>
+                  <a href="https://wa.me/5531971689316?text=Olá,%20preciso%20de%20ajuda%20para%20renovar%20minha%20receita%20médica" target="_blank" className="cursor-pointer mt-3 inline-flex rounded-lg border border-slate-300 px-4 py-2 font-semibold hover:bg-white focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300" aria-label="Abrir WhatsApp">
+                    Abrir WhatsApp
+                  </a>
+                </div>
+                <div className="p-6 rounded-2xl border border-slate-200">
+                  <h3 className="font-semibold">Privacidade</h3>
+                  <p className="mt-1 text-slate-700">Seus dados são tratados conforme LGPD.</p>
+                  <div className="mt-3 flex items-center gap-2 text-sm text-slate-600" aria-label="Selos de confiança">
+                    <svg className="h-5 w-5" viewBox="0 0 24 24" role="img" aria-label="Cadeado" xmlns="http://www.w3.org/2000/svg">
+                      <title>Segurança</title>
+                      <path d="M6 10h12v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-9z" fill="#0f172a"/>
+                      <path d="M8 10V7a4 4 0 1 1 8 0v3" fill="none" stroke="#0f172a" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                    <span>Criptografia e auditoria clínica</span>
+                  </div>
+                </div>
+              </div>
+              <p className="mt-6 text-sm text-slate-600">
+                Aviso: este serviço atende à renovação de receitas de ansiedade já diagnosticada. Não substitui consulta completa. A avaliação é individual.
+              </p>
             </div>
           </section>
         </main>

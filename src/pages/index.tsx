@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { analytics } from "@/utils/analytics";
+import { priceLp1 } from "@/utils/lp1";
 import Footer from "@/components/Footer";
 import { redirect } from "@/utils/redirect";
 import posthog from "posthog-js";
@@ -25,7 +26,7 @@ function renderHeroSectionWithPrice() {
           </p>
           <div className="mb-8">
             <div className="inline-flex items-center bg-white rounded-lg px-6 py-3 shadow-md border border-gray-200">
-              <span className="text-3xl font-bold text-blue-600 mr-2">R$ 89</span>
+              <span className="text-3xl font-bold text-blue-600 mr-2" style={{minWidth: "86 px"}}>R$ {priceLp1}</span>
               <span className="text-gray-600">por receita</span>
               <span className="ml-4 text-sm text-green-600 font-semibold">✓ Economize até R$ 300+</span>
             </div>
@@ -181,7 +182,7 @@ export default function Home() {
                 </svg>
                 <span className="text-xl font-bold text-gray-900">DrMente</span>
               </div>
-              <button onClick={handleCTAClick} className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors focus-visible" aria-label="Começar renovação">
+              <button onClick={handleCTAClick} className="cursor-pointer bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors focus-visible" aria-label="Começar renovação">
                 Começar Agora
               </button>
             </div>
@@ -290,8 +291,65 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Pricing */}
+        <section className="py-16 bg-gray-50" aria-labelledby="pricing-heading">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 id="pricing-heading" className="text-3xl font-bold text-center text-gray-900 mb-4">
+              Preço justo e transparente
+            </h2>
+            <p className="text-center text-gray-600 mb-12">Muito mais barato que uma consulta particular (R$ 300+)</p>
+            <div className="max-w-md mx-auto">
+              <div className="border-2 border-blue-500 rounded-lg p-8 bg-white shadow-lg text-center">
+                <div className="mb-6">
+                  <span className="text-5xl font-bold text-gray-900">R$ {priceLp1}</span>
+                  <span className="text-gray-600 text-lg">/receita</span>
+                </div>
+                <h3 className="text-2xl font-bold mb-6 text-gray-900">Tudo Incluído</h3>
+                <ul className="space-y-4 mb-8 text-left">
+                  <li className="flex items-center">
+                    <svg className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                    </svg>
+                    <span>Renovação em até 24 horas</span>
+                  </li>
+                  <li className="flex items-center">
+                    <svg className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                    </svg>
+                    <span>Receita digital válida em todas as farmácias</span>
+                  </li>
+                  <li className="flex items-center">
+                    <svg className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                    </svg>
+                    <span>Análise por médicos licenciados</span>
+                  </li>
+                  <li className="flex items-center">
+                    <svg className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                    </svg>
+                    <span>Suporte especializado</span>
+          </li>
+                  <li className="flex items-center">
+                    <svg className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                    </svg>
+                    <span>Reembolso se não aprovado</span>
+          </li>
+                </ul>
+                <button onClick={handleCTAClick} className="w-full bg-blue-600 text-white py-4 text-lg font-semibold rounded-lg hover:bg-blue-700 transition-colors focus-visible">
+                  Renovar Minha Receita
+                </button>
+                <p className="text-sm text-gray-600 mt-4">
+                  ✓ Pagamento seguro • ✓ Sem mensalidades
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Features Deep-dive */}
-        <section className="py-16 bg-gray-50" aria-labelledby="features-heading">
+        <section className="py-16 bg-white" aria-labelledby="features-heading">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 id="features-heading" className="text-3xl font-bold text-center text-gray-900 mb-12">
               Tecnologia e segurança de ponta
@@ -339,63 +397,6 @@ export default function Home() {
                   <path d="M316 90l2 2 4-4" stroke="white" strokeWidth="2" fill="none"/>
                   <text x="200" y="220" textAnchor="middle" className="text-xs fill-gray-600">Receita Digital Válida</text>
                 </svg>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Pricing */}
-        <section className="py-16 bg-white" aria-labelledby="pricing-heading">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 id="pricing-heading" className="text-3xl font-bold text-center text-gray-900 mb-4">
-              Preço justo e transparente
-            </h2>
-            <p className="text-center text-gray-600 mb-12">Muito mais barato que uma consulta particular (R$ 300+)</p>
-            <div className="max-w-md mx-auto">
-              <div className="border-2 border-blue-500 rounded-lg p-8 bg-white shadow-lg text-center">
-                <div className="mb-6">
-                  <span className="text-5xl font-bold text-gray-900">R$ 89</span>
-                  <span className="text-gray-600 text-lg">/receita</span>
-                </div>
-                <h3 className="text-2xl font-bold mb-6 text-gray-900">Tudo Incluído</h3>
-                <ul className="space-y-4 mb-8 text-left">
-                  <li className="flex items-center">
-                    <svg className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                    </svg>
-                    <span>Renovação em até 24 horas</span>
-                  </li>
-                  <li className="flex items-center">
-                    <svg className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                    </svg>
-                    <span>Receita digital válida em todas as farmácias</span>
-                  </li>
-                  <li className="flex items-center">
-                    <svg className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                    </svg>
-                    <span>Análise por médicos licenciados</span>
-                  </li>
-                  <li className="flex items-center">
-                    <svg className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                    </svg>
-                    <span>Suporte especializado</span>
-          </li>
-                  <li className="flex items-center">
-                    <svg className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                    </svg>
-                    <span>Reembolso se não aprovado</span>
-          </li>
-                </ul>
-                <button onClick={handleCTAClick} className="w-full bg-blue-600 text-white py-4 text-lg font-semibold rounded-lg hover:bg-blue-700 transition-colors focus-visible">
-                  Renovar Minha Receita
-                </button>
-                <p className="text-sm text-gray-600 mt-4">
-                  ✓ Pagamento seguro • ✓ Sem mensalidades
-                </p>
               </div>
             </div>
           </div>
@@ -534,7 +535,7 @@ export default function Home() {
             <p className="text-xl text-blue-100 mb-8">
               Economize tempo e dinheiro. Processo 100% online e seguro.
             </p>
-            <button onClick={handleCTAClick} className="bg-white text-blue-600 px-8 py-4 text-lg font-semibold rounded-lg hover:bg-gray-50 transform hover:scale-105 transition-all duration-200 shadow-lg focus-visible" aria-label="Começar renovação de receita médica">
+            <button onClick={handleCTAClick} className="cursor-pointer bg-white text-blue-600 px-8 py-4 text-lg font-semibold rounded-lg hover:bg-gray-50 transform hover:scale-105 transition-all duration-200 shadow-lg focus-visible" aria-label="Começar renovação de receita médica">
               Começar Agora
             </button>
             <p className="text-blue-100 text-sm mt-4">

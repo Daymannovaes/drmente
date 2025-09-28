@@ -291,7 +291,7 @@ export default function Sucesso() {
                 <div className="p-6 rounded-2xl border border-slate-200">
                   <h3 className="font-semibold">WhatsApp</h3>
                   <p className="mt-1 text-slate-700">Atendimento em horário comercial.</p>
-                  <a className="cursor-pointer mt-3 inline-flex rounded-lg border border-slate-300 px-4 py-2 font-semibold hover:bg-white focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300" aria-label="Abrir WhatsApp">
+                  <a href="https://wa.me/5531971689316?text=Olá,%20preciso%20de%20ajuda%20para%20renovar%20minha%20receita%20médica" target="_blank" className="cursor-pointer mt-3 inline-flex rounded-lg border border-slate-300 px-4 py-2 font-semibold hover:bg-white focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300" aria-label="Abrir WhatsApp">
                     Abrir WhatsApp
                   </a>
                 </div>
