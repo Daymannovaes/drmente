@@ -337,7 +337,7 @@ export default function Home() {
                     <span>Reembolso se não aprovado</span>
           </li>
                 </ul>
-                <button onClick={handleCTAClick} className="w-full bg-blue-600 text-white py-4 text-lg font-semibold rounded-lg hover:bg-blue-700 transition-colors focus-visible">
+                <button onClick={handleCTAClick} className="cursor-pointer w-full bg-blue-600 text-white py-4 text-lg font-semibold rounded-lg hover:bg-blue-700 transition-colors focus-visible">
                   Renovar Minha Receita
                 </button>
                 <p className="text-sm text-gray-600 mt-4">
