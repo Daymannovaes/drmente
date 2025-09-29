@@ -4,10 +4,23 @@ import Footer from "@/components/Footer";
 import { analytics } from "@/utils/analytics";
 import { redirect } from "@/utils/redirect";
 import { priceLp1 } from "@/utils/lp1";
+import posthog from "posthog-js";
 
 export default function PagamentoSucesso() {
   const [progress, setProgress] = useState(0);
   const [currentText, setCurrentText] = useState(0);
+  const [price, setPrice] = useState(priceLp1);
+
+  useEffect(() => {
+    posthog.onFeatureFlags(() => {
+      const featureFlagPriceValue = posthog.getFeatureFlag('lp1-price-value');
+      if (featureFlagPriceValue  == 'price-29') {
+        setPrice(29)
+      } else if (featureFlagPriceValue  == 'price-49') {
+        setPrice(49)
+      }
+    })
+  }, []);
 
   const statusTexts = [
     "Confirmando seus dados...",
@@ -129,7 +142,7 @@ export default function PagamentoSucesso() {
                 </h1>
 
                 <p className="text-lg text-slate-700 mb-8 max-w-2xl mx-auto">
-                  Para dar continuidade, para receber sua receita apenas finalize o pagamento a seguir, no valor de <strong className="text-green-600">R$ {priceLp1}</strong>.
+                  Para dar continuidade, para receber sua receita apenas finalize o pagamento a seguir, no valor de <strong className="text-green-600">R$ {price}</strong>.
                 </p>
 
                 {/* Progress Bar Container */}
@@ -155,7 +168,7 @@ export default function PagamentoSucesso() {
                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                     </svg>
-                    Finalizar Pagamento - R$ {priceLp1}
+                    Finalizar Pagamento - R$ {price}
                   </button>
                 </div>
 
@@ -268,7 +281,7 @@ export default function PagamentoSucesso() {
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                   </svg>
-                  Emitir Receita - R$ {priceLp1}
+                  Emitir Receita - R$ {price}
                 </button>
                 <p className="text-slate-400 text-sm mt-4">
                   ✓ Pagamento seguro • ✓ Reembolso garantido se não aprovado
