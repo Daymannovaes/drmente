@@ -4,10 +4,10 @@ import { analytics } from "@/utils/analytics";
 import { priceLp1 } from "@/utils/lp1";
 import Footer from "@/components/Footer";
 import { redirect } from "@/utils/redirect";
-import posthog from "posthog-js";
+// import posthog from "posthog-js";
 
 export default function Home() {
-  const [heroWithPrice, setHeroWithPrice] = useState(false);
+  const [heroWithPrice, setHeroWithPrice] = useState(true);
   const [price, setPrice] = useState(priceLp1);
 
   function handleCTAClick() {
@@ -72,22 +72,22 @@ export default function Home() {
     )
   }
 
-  useEffect(() => {
-    posthog.onFeatureFlags(() => {
-      if (posthog.isFeatureEnabled('lp1-with-price') ) {
-        setHeroWithPrice(true);
-      } else {
-        setHeroWithPrice(false);
-      }
+  // useEffect(() => {
+  //   posthog.onFeatureFlags(() => {
+  //     if (posthog.isFeatureEnabled('lp1-with-price') ) {
+  //       setHeroWithPrice(true);
+  //     } else {
+  //       setHeroWithPrice(false);
+  //     }
 
-      const featureFlagPriceValue = posthog.getFeatureFlag('lp1-price-value');
-      if (featureFlagPriceValue  == 'price-29') {
-        setPrice(29)
-      } else if (featureFlagPriceValue  == 'price-49') {
-        setPrice(49)
-      }
-    })
-  }, []);
+  //     const featureFlagPriceValue = posthog.getFeatureFlag('lp1-price-value');
+  //     if (featureFlagPriceValue  == 'price-29') {
+  //       setPrice(29)
+  //     } else if (featureFlagPriceValue  == 'price-49') {
+  //       setPrice(49)
+  //     }
+  //   })
+  // }, []);
 
   return (
     <>

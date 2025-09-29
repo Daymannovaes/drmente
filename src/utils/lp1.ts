@@ -1,1 +1,1 @@
-export const priceLp1 = 89;
+export const priceLp1 = 49;

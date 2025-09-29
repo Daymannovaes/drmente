@@ -11,16 +11,16 @@ export default function PagamentoSucesso() {
   const [currentText, setCurrentText] = useState(0);
   const [price, setPrice] = useState(priceLp1);
 
-  useEffect(() => {
-    posthog.onFeatureFlags(() => {
-      const featureFlagPriceValue = posthog.getFeatureFlag('lp1-price-value');
-      if (featureFlagPriceValue  == 'price-29') {
-        setPrice(29)
-      } else if (featureFlagPriceValue  == 'price-49') {
-        setPrice(49)
-      }
-    })
-  }, []);
+  // useEffect(() => {
+  //   posthog.onFeatureFlags(() => {
+  //     const featureFlagPriceValue = posthog.getFeatureFlag('lp1-price-value');
+  //     if (featureFlagPriceValue  == 'price-29') {
+  //       setPrice(29)
+  //     } else if (featureFlagPriceValue  == 'price-49') {
+  //       setPrice(49)
+  //     }
+  //   })
+  // }, []);
 
   const statusTexts = [
     "Confirmando seus dados...",
@@ -192,7 +192,7 @@ export default function PagamentoSucesso() {
                       <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path>
                       </svg>
-                      Receita enviada por email
+                      Receita enviada por email e sms
                     </div>
                   </div>
                 </div>
@@ -225,7 +225,7 @@ export default function PagamentoSucesso() {
                 </details>
                 <details className="group border border-slate-200 rounded-xl p-4 bg-white">
                   <summary className="cursor-pointer font-semibold focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300 rounded">
-                    Preciso de ajuda?
+                    Precisa de ajuda?
                   </summary>
                   <p className="mt-2 text-slate-700">Entre em contato pelo WhatsApp ou email: mente@dr.com</p>
                 </details>
