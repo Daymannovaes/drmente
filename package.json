@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@vercel/node": "^5.3.24",
+    "axios": "^1.12.2",
     "ioredis": "^5.8.1",
     "next": "15.5.4",
     "openai": "^6.6.0",

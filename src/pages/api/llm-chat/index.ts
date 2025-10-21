@@ -2,6 +2,23 @@ import { WebhookPayload } from "./webhook-payload.entity";
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import { getRedisClient } from "@/lib/redis";
 
+import axios from "axios";
+
+export const cw = axios.create({
+  baseURL: process.env.CW_BASE_URL,
+  headers: {
+    "api_access_token": process.env.CW_API_TOKEN!,
+    "Content-Type": "application/json",
+  },
+});
+
+async function sendMessageToChatwoot(accountId: string, conversationId: number, text: string) {
+  await cw.post(`/api/v1/accounts/${accountId}/conversations/${conversationId}/messages`, {
+    content: text,
+    message_type: "outgoing",
+  });
+}
+
 interface LlmChatConversation {
   messages: LlmChatMessage[];
   last_updated: string | null;
@@ -211,6 +228,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
+    const handled = await handleRequest(req.body as WebhookPayload);
+    if (handled) {
+      return res.status(200).json({ ok: true, conversationId: req.body.conversation.id, reply: { text: handled.message } });
+    }
+
     const result = await saveMessagePayloadConversation(req.body as WebhookPayload);
     const prompt = await buildIntakePrompt(result.conversationId);
 
@@ -221,6 +243,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.log('prompt', prompt);
     console.log('reply', reply);
 
+    await sendMessageToChatwoot(process.env.CW_ACCOUNT_ID!, result.conversationId, reply.text);
+
     return res.status(200).json({ ok: true, conversationId: result.conversationId, reply });
   } catch (error) {
     console.error('Error handling request:', error);
@@ -230,4 +254,61 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       error: error instanceof Error ? error.message : 'Internal server error'
     });
   }
+}
+
+async function handleRequest(payload: WebhookPayload): Promise<{ success: boolean; message: string } | false> {
+  const conversationId = payload?.conversation?.id;
+  if (!conversationId) {
+    const err = new Error("conversation.id ausente no payload");
+    (err as Error & { status: number }).status = 400;
+    throw err;
+  }
+  // If message is outgoing, save to Redis and return
+  if (payload.message_type === 'outgoing') {
+    console.log('outgoing message - ignoring');
+    return { success: false, message: "Outgoing message - ignoring" };
+  }
+
+  // Check if message is [command] reset
+  const messageContent = payload?.content.trim().toLowerCase();
+  if (messageContent === '[command] reset') {
+    const redis = await getRedisClient();
+    const key = `${CONVERSATION_KEY_PREFIX}${conversationId}`;
+    await redis.del(key);
+
+    await sendMessageToChatwoot(process.env.CW_ACCOUNT_ID!, conversationId, "[command] reset - ok.");
+    return { success: true, message: "[command] reset - ok." };
+  }
+
+  // Check if message is [command] activate chatbot
+  if (messageContent === '[command] chatbot on') {
+    const redis = await getRedisClient();
+    const key = `chatbot_active:${conversationId}`;
+    await redis.set(key, '1');
+
+    await sendMessageToChatwoot(process.env.CW_ACCOUNT_ID!, conversationId, "[command] chatbot activated.");
+    return { success: true, message: "[command] chatbot activated." };
+  }
+  // Check if message is [command] activate chatbot
+  if (messageContent === '[command] chatbot off') {
+    const redis = await getRedisClient();
+    const key = `chatbot_active:${conversationId}`;
+    await redis.set(key, '0');
+
+    await sendMessageToChatwoot(process.env.CW_ACCOUNT_ID!, conversationId, "[command] chatbot deactivated.");
+    return { success: true, message: "[command] chatbot deactivated." };
+  }
+
+  // Check if chatbot is active
+  const redis = await getRedisClient();
+  const key = `chatbot_active:${conversationId}`;
+  const chatbotActive = await redis.get(key);
+  if (chatbotActive !== '1') {
+    console.log('chatbot not active - ignoring');
+    return { success: false, message: "Chatbot is not active." };
+  } else {
+    console.log('chatbot active - processing');
+  }
+
+  return false;
 }
