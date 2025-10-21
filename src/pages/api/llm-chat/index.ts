@@ -168,10 +168,10 @@ async function buildIntakePrompt(conversationId: number) {
 }
 
 import OpenAI from 'openai';
-export const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const DEFAULT_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
 
-export async function getIntakeReply({
+async function getIntakeReply({
   system,
   messages
 }: {
@@ -202,7 +202,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+    res.status(200).end();
+    return false;
   }
 
   if (req.method !== 'POST') {
