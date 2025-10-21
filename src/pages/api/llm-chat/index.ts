@@ -264,7 +264,19 @@ async function handleRequest(payload: WebhookPayload): Promise<{ success: boolea
     (err as Error & { status: number }).status = 400;
     throw err;
   }
-  // If message is outgoing, save to Redis and return
+
+  const redis = await getRedisClient();
+
+  // disable chatbot globally
+  const chatbotActiveGlobally = await redis.get('chatbot_active_globally');
+  if (chatbotActiveGlobally !== '1') {
+    console.log('chatbot not active globally - ignoring');
+    return { success: false, message: "Chatbot is not active globally." };
+  } else {
+    console.log('chatbot active globally - processing');
+  }
+
+  // If message is outgoing, ignore it
   if (payload.message_type === 'outgoing') {
     console.log('outgoing message - ignoring');
     return { success: false, message: "Outgoing message - ignoring" };
@@ -273,7 +285,6 @@ async function handleRequest(payload: WebhookPayload): Promise<{ success: boolea
   // Check if message is [command] reset
   const messageContent = payload?.content.trim().toLowerCase();
   if (messageContent === '[command] reset') {
-    const redis = await getRedisClient();
     const key = `${CONVERSATION_KEY_PREFIX}${conversationId}`;
     await redis.del(key);
 
@@ -283,7 +294,6 @@ async function handleRequest(payload: WebhookPayload): Promise<{ success: boolea
 
   // Check if message is [command] activate chatbot
   if (messageContent === '[command] chatbot on') {
-    const redis = await getRedisClient();
     const key = `chatbot_active:${conversationId}`;
     await redis.set(key, '1');
 
@@ -292,7 +302,6 @@ async function handleRequest(payload: WebhookPayload): Promise<{ success: boolea
   }
   // Check if message is [command] activate chatbot
   if (messageContent === '[command] chatbot off') {
-    const redis = await getRedisClient();
     const key = `chatbot_active:${conversationId}`;
     await redis.set(key, '0');
 
@@ -301,14 +310,32 @@ async function handleRequest(payload: WebhookPayload): Promise<{ success: boolea
   }
 
   // Check if chatbot is active
-  const redis = await getRedisClient();
   const key = `chatbot_active:${conversationId}`;
-  const chatbotActive = await redis.get(key);
-  if (chatbotActive !== '1') {
-    console.log('chatbot not active - ignoring');
+  const chatbotActiveForChat = await redis.get(key);
+
+  // For 10% of new chats, enable the chatbot by default
+  if (chatbotActiveForChat === null) {
+    if (Math.random() < 0.1) {
+      await redis.set(key, '1');
+      console.log('chatbot auto-activated for this chat', key);
+      console.log('chatbot active for this chat - processing');
+
+      // return false to consider it not handled, so llm can take over
+      return false;
+    } else {
+      await redis.set(key, '0');
+      console.log('chatbot not auto-activated for this chat', key);
+      console.log('chatbot not active - ignoring');
+
+      return { success: false, message: "Chatbot is not active." };
+    }
+  }
+
+  if (chatbotActiveForChat !== '1') {
+    console.log('chatbot not active for this chat - ignoring', key);
     return { success: false, message: "Chatbot is not active." };
   } else {
-    console.log('chatbot active - processing');
+    console.log('chatbot active for this chat - processing', key);
   }
 
   return false;
