@@ -209,7 +209,7 @@ async function getIntakeReply({
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  console.log('about to call the LLM', req.method);
+  console.error('about to call the LLM', req.method);
   // if (!auth(req, res)) {
   //   return;
   // }
