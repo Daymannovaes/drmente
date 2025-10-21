@@ -1,8 +1,6 @@
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
 import { WebhookPayload } from "./webhook-payload.entity";
 import { VercelRequest, VercelResponse } from "@vercel/node";
+import { getRedisClient } from "@/lib/redis";
 
 interface LlmChatConversation {
   messages: LlmChatMessage[];
@@ -20,12 +18,8 @@ interface LlmChatMessage {
   type: "user" | "assistant";
 }
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Diretório onde cada conversa será salva como <conversationId>.json
-const STORAGE_DIR = process.env.STORAGE_DIR || path.join(__dirname, "data");
-fs.mkdirSync(STORAGE_DIR, { recursive: true });
+// Redis key prefix for conversations
+const CONVERSATION_KEY_PREFIX = "llm-chat:conversation:";
 
 // -------------------------------
 // Prompt de triagem (PT-BR)
@@ -56,18 +50,41 @@ Você é um assistente de recepção de um centro médico especializado em **ren
 - Informe o próximo passo: um profissional avaliará as respostas e prosseguirá com orientações.
 `;
 
-// Utilitário para ler arquivo JSON com tolerância a erro
-function readJsonSafe(filePath: string): LlmChatConversation | null {
+// Utilitário para ler conversa do Redis
+async function getConversationFromRedis(conversationId: number): Promise<LlmChatConversation | null> {
   try {
-    const raw = fs.readFileSync(filePath, "utf8");
+    const redis = getRedisClient();
+    const key = `${CONVERSATION_KEY_PREFIX}${conversationId}`;
+    const raw = await redis.get(key);
+    
+    if (!raw) {
+      return null;
+    }
+    
     return JSON.parse(raw);
-  } catch {
+  } catch (error) {
+    console.error('Error reading from Redis:', error);
     return null;
   }
 }
 
-// Salva (ou cria) o arquivo da conversa, anexando a nova mensagem
-function saveMessagePayloadyConversation(webhookPayload: WebhookPayload) {
+// Utilitário para salvar conversa no Redis
+async function saveConversationToRedis(conversationId: number, conversation: LlmChatConversation): Promise<void> {
+  try {
+    const redis = getRedisClient();
+    const key = `${CONVERSATION_KEY_PREFIX}${conversationId}`;
+    const value = JSON.stringify(conversation);
+    
+    // Set with 7 days expiration (in seconds)
+    await redis.setex(key, 7 * 24 * 60 * 60, value);
+  } catch (error) {
+    console.error('Error saving to Redis:', error);
+    throw error;
+  }
+}
+
+// Salva (ou cria) a conversa no Redis, anexando a nova mensagem
+async function saveMessagePayloadConversation(webhookPayload: WebhookPayload) {
   const conversationId = webhookPayload?.conversation?.id;
   if (!conversationId) {
     const err = new Error("conversation.id ausente no payload");
@@ -75,8 +92,7 @@ function saveMessagePayloadyConversation(webhookPayload: WebhookPayload) {
     throw err;
   }
 
-  const filePath = path.join(STORAGE_DIR, `${conversationId}.json`);
-  const existing = readJsonSafe(filePath) || {
+  const existing = await getConversationFromRedis(conversationId) || {
     messages: [],
     last_updated: null,
   };
@@ -95,14 +111,13 @@ function saveMessagePayloadyConversation(webhookPayload: WebhookPayload) {
   existing.messages.push(minimalMessage);
   existing.last_updated = new Date().toISOString();
 
-  fs.writeFileSync(filePath, JSON.stringify(existing, null, 2), "utf8");
+  await saveConversationToRedis(conversationId, existing);
 
-  return { filePath, conversationId };
+  return { conversationId };
 }
 
-function saveLlmReplyIntoConversation(conversationId: number, reply: string) {
-  const filePath = path.join(STORAGE_DIR, `${conversationId}.json`);
-  const data = readJsonSafe(filePath);
+async function saveLlmReplyIntoConversation(conversationId: number, reply: string) {
+  const data = await getConversationFromRedis(conversationId);
   if (!data) {
     const err = new Error("Conversa não encontrada");
     (err as Error & { status: number }).status = 404;
@@ -123,13 +138,12 @@ function saveLlmReplyIntoConversation(conversationId: number, reply: string) {
   data.messages.push(minimalMessage);
   data.last_updated = new Date().toISOString();
 
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf8");
+  await saveConversationToRedis(conversationId, data);
 }
 
 // Monta um prompt para enviar à LLM com o histórico da conversa
-function buildIntakePrompt(conversationId: number) {
-  const filePath = path.join(STORAGE_DIR, `${conversationId}.json`);
-  const data = readJsonSafe(filePath);
+async function buildIntakePrompt(conversationId: number) {
+  const data = await getConversationFromRedis(conversationId);
   if (!data) {
     const err = new Error("Conversa não encontrada");
     (err as Error & { status: number }).status = 404;
@@ -190,15 +204,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
 
-  const result = saveMessagePayloadyConversation(req.body as WebhookPayload);
-  const prompt = buildIntakePrompt(result.conversationId);
+  try {
+    const result = await saveMessagePayloadConversation(req.body as WebhookPayload);
+    const prompt = await buildIntakePrompt(result.conversationId);
 
-  const reply = await getIntakeReply({ system: prompt.system, messages: prompt.messages });
+    const reply = await getIntakeReply({ system: prompt.system, messages: prompt.messages });
 
-  await saveLlmReplyIntoConversation(result.conversationId, reply.text);
+    await saveLlmReplyIntoConversation(result.conversationId, reply.text);
 
-  console.log('prompt', prompt);
-  console.log('reply', reply);
+    console.log('prompt', prompt);
+    console.log('reply', reply);
 
-  return res.status(200).json({ ok: true, conversationId: result.conversationId, reply });
+    return res.status(200).json({ ok: true, conversationId: result.conversationId, reply });
+  } catch (error) {
+    console.error('Error handling request:', error);
+    const status = (error as Error & { status?: number }).status || 500;
+    return res.status(status).json({ 
+      ok: false, 
+      error: error instanceof Error ? error.message : 'Internal server error' 
+    });
+  }
 }
