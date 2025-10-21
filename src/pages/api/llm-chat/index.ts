@@ -56,11 +56,11 @@ async function getConversationFromRedis(conversationId: number): Promise<LlmChat
     const redis = getRedisClient();
     const key = `${CONVERSATION_KEY_PREFIX}${conversationId}`;
     const raw = await redis.get(key);
-    
+
     if (!raw) {
       return null;
     }
-    
+
     return JSON.parse(raw);
   } catch (error) {
     console.error('Error reading from Redis:', error);
@@ -74,7 +74,7 @@ async function saveConversationToRedis(conversationId: number, conversation: Llm
     const redis = getRedisClient();
     const key = `${CONVERSATION_KEY_PREFIX}${conversationId}`;
     const value = JSON.stringify(conversation);
-    
+
     // Set with 7 days expiration (in seconds)
     await redis.setex(key, 7 * 24 * 60 * 60, value);
   } catch (error) {
@@ -192,6 +192,7 @@ export async function getIntakeReply({
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  console.log('about to call the LLM', req.method);
   // if (!auth(req, res)) {
   //   return;
   // }
@@ -219,9 +220,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   } catch (error) {
     console.error('Error handling request:', error);
     const status = (error as Error & { status?: number }).status || 500;
-    return res.status(status).json({ 
-      ok: false, 
-      error: error instanceof Error ? error.message : 'Internal server error' 
+    return res.status(status).json({
+      ok: false,
+      error: error instanceof Error ? error.message : 'Internal server error'
     });
   }
 }
