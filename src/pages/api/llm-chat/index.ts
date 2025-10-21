@@ -17,7 +17,7 @@ interface LlmChatMessage {
   sender_name: string;
   sender_phone: string;
   sender_email: string;
-  type: string;
+  type: "user" | "assistant";
 }
 
 const __filename = fileURLToPath(import.meta.url);
@@ -61,7 +61,7 @@ function readJsonSafe(filePath: string): LlmChatConversation | null {
   try {
     const raw = fs.readFileSync(filePath, "utf8");
     return JSON.parse(raw);
-  } catch (e) {
+  } catch {
     return null;
   }
 }
@@ -89,7 +89,7 @@ function saveMessagePayloadyConversation(webhookPayload: WebhookPayload) {
     sender_name: webhookPayload.sender?.name,
     sender_phone: webhookPayload.sender?.phone_number || "",
     sender_email: webhookPayload.sender?.email || "",
-    type: webhookPayload.message_type,
+    type: webhookPayload.message_type === "outgoing" ? "assistant" : "user",
   };
 
   existing.messages.push(minimalMessage);
@@ -117,7 +117,7 @@ function saveLlmReplyIntoConversation(conversationId: number, reply: string) {
     sender_name: "LLM",
     sender_phone: "",
     sender_email: "",
-    type: "outgoing",
+    type: "assistant",
   };
 
   data.messages.push(minimalMessage);
@@ -136,19 +136,15 @@ function buildIntakePrompt(conversationId: number) {
     throw err;
   }
 
-  // Junta mensagens em ordem simples (id, emissor, conteúdo)
-  const transcript = data.messages
-    .map((m: LlmChatMessage) => {
-      const when = m.created_at ? new Date(m.created_at).toISOString() : null;
-      return `[#${m.id}] (${m.sender || "desconhecido"}) ${when || ""}: ${m.content}`;
-    })
-    .join("\n");
-
-  const userKickoff = `Aqui está o histórico da conversa até agora (se houver):\n\n${transcript}\n\nPor favor, continue a entrevista seguindo estritamente o fluxo acima, **perguntando UMA coisa por vez**.`;
+  // Converte mensagens para o formato OpenAI
+  const messages = data.messages.map((m: LlmChatMessage) => ({
+    role: m.type,
+    content: m.content,
+  }));
 
   return {
     system: INTAKE_SYSTEM_PROMPT_PT,
-    user: userKickoff,
+    messages,
     meta: {
       conversationId,
       messagesCount: data.messages.length,
@@ -161,17 +157,22 @@ import OpenAI from 'openai';
 export const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const DEFAULT_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
 
-export async function getIntakeReply({ system, user }: { system: string, user: string }) {
-  const response = await openai.responses.create({
+export async function getIntakeReply({
+  system,
+  messages
+}: {
+  system: string;
+  messages: Array<{ role: "user" | "assistant"; content: string }>
+}) {
+  const response = await openai.chat.completions.create({
     model: DEFAULT_MODEL,
-    input: [
+    messages: [
       { role: 'system', content: system },
-      { role: 'user', content: user }
+      ...messages
     ],
   });
 
-
-  const text = response.output_text;
+  const text = response.choices[0]?.message?.content || "";
 
   return { text, raw: response };
 }
@@ -192,7 +193,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const result = saveMessagePayloadyConversation(req.body as WebhookPayload);
   const prompt = buildIntakePrompt(result.conversationId);
 
-  const reply = await getIntakeReply({ system: prompt.system, user: prompt.user });
+  const reply = await getIntakeReply({ system: prompt.system, messages: prompt.messages });
 
   await saveLlmReplyIntoConversation(result.conversationId, reply.text);
 
