@@ -13,7 +13,7 @@ export function ChatwootScript() {
                 s.parentNode.insertBefore(g,s);
                 g.onload=function(){
                   window.chatwootSDK.run({
-                    websiteToken: 'D7hj7H83p3LGX8QAhy1ZQ4jA',
+                    websiteToken: 'vbu3DNS1bX6ykdMZYv5BMsWZ',
                     baseUrl: BASE_URL
                   })
                 }
