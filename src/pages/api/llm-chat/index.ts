@@ -293,10 +293,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.log('prompt', prompt);
     console.log('reply', reply);
 
+    await sendMessageToChatwoot(process.env.CW_ACCOUNT_ID!, result.conversationId, reply.text);
+
     if (reply.isComplete) {
-      await markConversationAsComplete(req.body as WebhookPayload);
-    } else {
-      await sendMessageToChatwoot(process.env.CW_ACCOUNT_ID!, result.conversationId, reply.text);
+      await completeConversationAndNotifyDoctor(req.body as WebhookPayload);
     }
 
     return res.status(200).json({ ok: true, conversationId: result.conversationId, reply });
@@ -310,7 +310,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 }
 
-async function markConversationAsComplete(message: WebhookPayload) {
+async function completeConversationAndNotifyDoctor(message: WebhookPayload) {
   const conversationId = message?.conversation?.id;
 
   const redis = await getRedisClient();
