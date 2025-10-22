@@ -44,13 +44,16 @@ const CONVERSATION_KEY_PREFIX = "llm-chat:conversation:";
 const INTAKE_SYSTEM_PROMPT_PT = `
 Você é um assistente de recepção de um centro médico especializado em **renovação de receitas**. Sua missão é **conduzir uma entrevista estruturada**, de forma cordial, objetiva e ética, para coletar informações necessárias antes da avaliação clínica.
 
+**IMPORTANTE**: Você DEVE retornar suas respostas em formato JSON estruturado com os campos: message, conversation_complete, current_step.
+
 **Regras:**
 - Pergunte **uma coisa por vez** e aguarde resposta.
 - Use linguagem simples, tom empático e profissional.
 - Se a pessoa não souber responder, ou se responder parcialmente, pergunte novamente o que falta, de forma suave e sem pressão.
 - Caso apareça uma emergência (p.ex., ideação suicida, sintomas graves agudos), **oriente procurar atendimento médico imediato** (SAMU/UPA) e avise que um profissional da equipe será notificado.
 - **Não faça diagnóstico, não ajuste dose, não prescreva.** Diga que a prescrição final depende do médico responsável.
-- Ao final, faça um **resumo estruturado** dos dados coletados.
+- Se a pessoa perguntar sobre preço, diga é no valor de R$89,00. Em nova linha, retome a conversa de forma amigável e retorne aos passos do fluxo de perguntas.
+- Se a pessoa perguntar como funciona, apenas diga que uma consulta será feita aqui mesmo por mensagem de whatsapp, e que após o pagamento enviaremos a receita digital, e basta apresentá-la em qualquer farmácia.
 - Não responda nenhuma pergunta que fugir do escopo do assunto de renovação de receitas. Se a pergunta não estiver relacionada a renovação de receitas, responda que não temos informações sobre o assunto.
 
 **Fluxo de perguntas (siga na ordem):**
@@ -63,9 +66,16 @@ Você é um assistente de recepção de um centro médico especializado em **ren
 7) "Tem algum sintoma novo, sintoma que tenha voltado ou agravado que sente que é importante compartilhar comigo?"
 8) "Você tem bipolaridade ou esquizofrenia? Já foi internado em hospital psiquiátrico?"
 
-**Ao terminar:**
-- Confirme nome completo, medicamento/dose/frequência, diagnóstico, tempo de uso, satisfação e sintomas atuais.
-- Informe o próximo passo: um profissional avaliará as respostas e prosseguirá com orientações.
+**Controle de Estado (OBRIGATÓRIO):**
+- Defina "current_step" com o número da pergunta atual (1-8)
+- Defina "conversation_complete" como true APENAS quando todas as 8 perguntas forem respondidas
+
+**Ao terminar (conversation_complete = true):**
+Informe o próximo passo: após o pagamento, um profissional avaliará as respostas e prosseguirá com orientações.
+  "Para continuar com seu novo tratamento eu preciso:
+
+    1- dos seus dados pessoais de nome completo, data de nascimento e cep (para confeccionar a receita médica)
+    2- me enviar o comprovante de pagamento do valor de 89 reais no PIX 49.247.066/0001-70"
 `;
 
 // Utilitário para ler conversa do Redis
@@ -189,6 +199,12 @@ import OpenAI from 'openai';
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const DEFAULT_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
 
+interface IntakeResponse {
+  message: string;
+  conversation_complete: boolean;
+  current_step?: number; // 1-9 para as perguntas
+}
+
 async function getIntakeReply({
   system,
   messages
@@ -202,11 +218,44 @@ async function getIntakeReply({
       { role: 'system', content: system },
       ...messages
     ],
+    response_format: {
+      type: "json_schema",
+      json_schema: {
+        name: "intake_response",
+        strict: true,
+        schema: {
+          type: "object",
+          properties: {
+            message: {
+              type: "string",
+              description: "A mensagem que será enviada ao paciente"
+            },
+            conversation_complete: {
+              type: "boolean",
+              description: "true se todas as 9 perguntas foram respondidas, dados pessoais coletados e comprovante de pagamento recebido"
+            },
+            current_step: {
+              type: "number",
+              description: "Número da pergunta atual (1-9)"
+            },
+          },
+          required: ["message", "conversation_complete", "current_step"],
+          additionalProperties: false
+        }
+      }
+    }
   });
 
-  const text = response.choices[0]?.message?.content || "";
+  const content = response.choices[0]?.message?.content || "{}";
+  console.log('content', content);
+  const parsed: IntakeResponse = JSON.parse(content);
 
-  return { text, raw: response };
+  return {
+    text: parsed.message,
+    isComplete: parsed.conversation_complete,
+    currentStep: parsed.current_step,
+    raw: response
+  };
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -244,7 +293,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.log('prompt', prompt);
     console.log('reply', reply);
 
-    await sendMessageToChatwoot(process.env.CW_ACCOUNT_ID!, result.conversationId, reply.text);
+    if (reply.isComplete) {
+      await markConversationAsComplete(req.body as WebhookPayload);
+    } else {
+      await sendMessageToChatwoot(process.env.CW_ACCOUNT_ID!, result.conversationId, reply.text);
+    }
 
     return res.status(200).json({ ok: true, conversationId: result.conversationId, reply });
   } catch (error) {
@@ -255,6 +308,44 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       error: error instanceof Error ? error.message : 'Internal server error'
     });
   }
+}
+
+async function markConversationAsComplete(message: WebhookPayload) {
+  const conversationId = message?.conversation?.id;
+
+  const redis = await getRedisClient();
+  const conversationKey = `chatbot_active:${conversationId}`;
+  await redis.set(conversationKey, '0'); // deactivate chatbot for this conversation
+
+  await notifyDoctorAboutFinishedConversation(message);
+}
+
+async function notifyDoctorAboutFinishedConversation(message: WebhookPayload) {
+  const conversationId = message?.conversation?.id;
+  const senderName = message?.sender?.name;
+  const senderPhone = message?.sender?.phone_number;
+
+  const doctors = [
+    32, // dayman
+    4   // gabriel
+  ];
+
+  for (const doctorId of doctors) {
+    await sendMessageToChatwoot(process.env.CW_ACCOUNT_ID!, doctorId, `Conversa terminada com o chatbot.
+ID da conversa: ${conversationId}
+Nome do paciente: ${senderName}
+Telefone do paciente: ${senderPhone}
+`);
+  }
+}
+
+enum COMMANDS {
+  RESET = '[command] reset',
+  CHATBOT_ON = '[command] chatbot on',
+  CHATBOT_OFF = '[command] chatbot off',
+  CHATBOT_THRESHOLD_SET = '[command] set threshold ',
+  CHATBOT_THRESHOLD_GET = '[command] get threshold',
+  SHOW_COMMANDS = '[command] show commands',
 }
 
 async function handleRequest(payload: WebhookPayload): Promise<{ success: boolean; message: string } | false> {
@@ -284,7 +375,14 @@ async function handleRequest(payload: WebhookPayload): Promise<{ success: boolea
 
   // Check if message is [command] reset
   const messageContent = payload?.content.trim().toLowerCase();
-  if (messageContent === '[command] reset') {
+
+
+  if (messageContent === COMMANDS.SHOW_COMMANDS) {
+    await sendMessageToChatwoot(process.env.CW_ACCOUNT_ID!, conversationId, "Available commands:\n\n" + Object.values(COMMANDS).join('\n'));
+    return { success: true, message: "Commands shown." };
+  }
+
+  if (messageContent === COMMANDS.RESET) {
     const key = `${CONVERSATION_KEY_PREFIX}${conversationId}`;
     await redis.del(key);
 
@@ -293,7 +391,7 @@ async function handleRequest(payload: WebhookPayload): Promise<{ success: boolea
   }
 
   // Check if message is [command] activate chatbot
-  if (messageContent === '[command] chatbot on') {
+  if (messageContent === COMMANDS.CHATBOT_ON) {
     const key = `chatbot_active:${conversationId}`;
     await redis.set(key, '1');
 
@@ -301,12 +399,28 @@ async function handleRequest(payload: WebhookPayload): Promise<{ success: boolea
     return { success: true, message: "[command] chatbot activated." };
   }
   // Check if message is [command] activate chatbot
-  if (messageContent === '[command] chatbot off') {
+  if (messageContent === COMMANDS.CHATBOT_OFF) {
     const key = `chatbot_active:${conversationId}`;
     await redis.set(key, '0');
 
     await sendMessageToChatwoot(process.env.CW_ACCOUNT_ID!, conversationId, "[command] chatbot deactivated.");
     return { success: true, message: "[command] chatbot deactivated." };
+  }
+
+  if (messageContent.startsWith(COMMANDS.CHATBOT_THRESHOLD_SET)) {
+    const threshold = parseFloat(messageContent.replace(COMMANDS.CHATBOT_THRESHOLD_SET, ''));
+    if (isNaN(threshold)) {
+      return { success: true, message: "Invalid threshold" };
+    }
+    await redis.set('chatbot_auto_activation_threshold', threshold.toString());
+    await sendMessageToChatwoot(process.env.CW_ACCOUNT_ID!, conversationId, "[command] chatbot threshold set to " + threshold);
+    return { success: true, message: "[command] chatbot threshold set to " + threshold };
+  }
+
+  if (messageContent.startsWith(COMMANDS.CHATBOT_THRESHOLD_GET)) {
+    const threshold = await redis.get('chatbot_auto_activation_threshold');
+    await sendMessageToChatwoot(process.env.CW_ACCOUNT_ID!, conversationId, "[command] chatbot threshold get: " + threshold);
+    return { success: true, message: "[command] chatbot threshold get - " + threshold };
   }
 
   // Check if chatbot is active
@@ -315,7 +429,10 @@ async function handleRequest(payload: WebhookPayload): Promise<{ success: boolea
 
   // For 10% of new chats, enable the chatbot by default
   if (chatbotActiveForChat === null) {
-    if (Math.random() < 0.1) {
+    let threshold: number | null = await redis.get('chatbot_auto_activation_threshold') as unknown as number;
+    threshold = threshold ? parseFloat(threshold as unknown as string) : 0.1;
+
+    if (Math.random() < threshold) {
       await redis.set(key, '1');
       console.log('chatbot auto-activated for this chat', key);
       console.log('chatbot active for this chat - processing');
