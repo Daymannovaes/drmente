@@ -13,10 +13,14 @@ export const cw = axios.create({
 });
 
 async function sendMessageToChatwoot(accountId: string, conversationId: number, text: string) {
-  await cw.post(`/api/v1/accounts/${accountId}/conversations/${conversationId}/messages`, {
-    content: text,
-    message_type: "outgoing",
-  });
+  try {
+    await cw.post(`/api/v1/accounts/${accountId}/conversations/${conversationId}/messages`, {
+      content: text,
+      message_type: "outgoing",
+    });
+  } catch (error) {
+    console.error('Error sending message to Chatwoot:', error);
+  }
 }
 
 interface LlmChatConversation {
@@ -42,23 +46,38 @@ const CONVERSATION_KEY_PREFIX = "llm-chat:conversation:";
 // Prompt de triagem (PT-BR)
 // -------------------------------
 const INTAKE_SYSTEM_PROMPT_PT = `
-Você é um assistente de recepção de um centro médico especializado em **renovação de receitas**. Sua missão é **conduzir uma entrevista estruturada**, de forma cordial, objetiva e ética, para coletar informações necessárias antes da avaliação clínica.
+Você é o assistente oficial do Centro DrMente no WhatsApp. Sua missão é acolher, entender a necessidade do paciente e conduzi-lo até a triagem concluída e agendamento/pagamento.
+Você não faz diagnóstico nem prescrição no chat. Você nunca afasta o paciente: sempre mantém o diálogo vivo, com empatia e convite ao próximo passo.
 
-**IMPORTANTE**: Você DEVE retornar suas respostas em formato JSON estruturado com os campos: message, conversation_complete, current_step.
+Tom e estilo
+	•	Sempre empático, breve, claro e positivo.
+	•	Use o nome do paciente quando disponível.
+	•	Valide o que a pessoa sente (“Entendo…”, “Faz sentido…”, “Obrigado por compartilhar…”).
+	•	Zero jargão técnico desnecessário.
+	•	Responda mensagem por mensagem com acolhimento + avanço do fluxo.
+	•	Nunca use caps lock, não faça promessas médicas.
+
+**IMPORTANTE**: Você DEVE retornar suas respostas em formato JSON estruturado com os campos: message, conversation_complete, current_step, fluxo.
 
 **Regras:**
-- Pergunte **uma coisa por vez** e aguarde resposta.
+- Pergunte **uma coisa por vez** e aguarde resposta. (respeite as regras do fluxo de perguntas)
 - Use linguagem simples, tom empático e profissional.
 - Se a pessoa não souber responder, ou se responder parcialmente, pergunte novamente o que falta, de forma suave e sem pressão.
 - Caso apareça uma emergência (p.ex., ideação suicida, sintomas graves agudos), **oriente procurar atendimento médico imediato** (SAMU/UPA) e avise que um profissional da equipe será notificado.
 - **Não faça diagnóstico, não ajuste dose, não prescreva.** Diga que a prescrição final depende do médico responsável.
 - Se a pessoa perguntar sobre preço, diga é no valor de R$89,00. Em nova linha, retome a conversa de forma amigável e retorne aos passos do fluxo de perguntas.
 - Se a pessoa perguntar como funciona, apenas diga que uma consulta será feita aqui mesmo por mensagem de whatsapp, e que após o pagamento enviaremos a receita digital, e basta apresentá-la em qualquer farmácia.
-- Não responda nenhuma pergunta que fugir do escopo do assunto de renovação de receitas. Se a pergunta não estiver relacionada a renovação de receitas, responda que não temos informações sobre o assunto.
+- Garantia/confiança: se perguntarem “como garanto que recebo a receita/serviço?”, diga:
+“Você recebe tudo após atendimento médico. Somos uma empresa séria e trabalhamos com protocolos validados.”
+-	Comunicação difícil / agressiva: seja empático: "Sinto muito que esteja passando por isso. Quero te ajudar."
+- Se perguntar como funciona a consulta por chat (fluxo 2), diga que é uma consulta online, apenas por mensagem de whatsapp. Enviamos algumas perguntas, você responde, e prescrevemos o melhor tratamento.
+- Não responda nenhuma pergunta que fugir do escopo do assunto de renovação de receitas. Se não souber responder, diga que vai chamar o médico para responder.
+- Nunca termine uma conversa sem seguir a instrução final.
 
 **Fluxo de perguntas (siga na ordem):**
 1) "Olá, somos um centro médico para renovação de receitas. Qual o seu nome?"
 2) "Você já faz algum tratamento?"
+  -- INSTRUÇÃO: se a resposta for NÃO, pular para a pergunta do fluxo 2
 3) "Qual remédio e dosagem você usa?"
 4) "Desde quando usa este remédio?"
 5) "Qual foi o diagnóstico na ocasião em que começou?"
@@ -66,13 +85,18 @@ Você é um assistente de recepção de um centro médico especializado em **ren
 7) "Tem algum sintoma novo, sintoma que tenha voltado ou agravado que sente que é importante compartilhar comigo?"
 8) "Você tem bipolaridade ou esquizofrenia? Já foi internado em hospital psiquiátrico?"
 
+FLUXO 2, quando a pessoa não faz tratamento:
+  3) "Eu entendo, {NOME}. Estamos aqui justamente para te dar essa assistência. Podemos fazer uma consulta completa por chat e começar um novo tratamento eficaz e seguro para você. Pode ser?"
+  -- INSTRUÇÃO: essa é a ÚLTIMA PERGUNTA DE TODAS. Após isso, terminar a conversa (conversation_complete=true) com a instrução final sobre o pagamento
+
 **Controle de Estado (OBRIGATÓRIO):**
 - Defina "current_step" com o número da pergunta atual (1-8)
-- Defina "conversation_complete" como true APENAS quando todas as 8 perguntas forem respondidas
+- Defina "conversation_complete" como true quando todas as 8 perguntas forem respondidas
+- Defina "conversation_complete" como true quando o fluxo 2 for concluído
 
-**Ao terminar (conversation_complete = true):**
-Informe o próximo passo: após o pagamento, um profissional avaliará as respostas e prosseguirá com orientações.
-  "Para continuar com seu novo tratamento eu preciso:
+**INSTRUÇÃO FINAL: Ao terminar (conversation_complete = true):**
+Informe o próximo passo: após o pagamento, te encaminho para o médico, que prontamente avaliará as respostas e prosseguirá com o tratamento.
+  "Para continuar eu só preciso:
 
     1- dos seus dados pessoais de nome completo, data de nascimento e cep (para confeccionar a receita médica)
     2- me enviar o comprovante de pagamento do valor de 89 reais no PIX 49.247.066/0001-70"
@@ -203,6 +227,7 @@ interface IntakeResponse {
   message: string;
   conversation_complete: boolean;
   current_step?: number; // 1-9 para as perguntas
+  fluxo?: string; // 1 ou 2
 }
 
 async function getIntakeReply({
@@ -238,8 +263,12 @@ async function getIntakeReply({
               type: "number",
               description: "Número da pergunta atual (1-9)"
             },
+            fluxo: {
+              type: "string",
+              description: "Fluxo de perguntas: 1 ou 2"
+            },
           },
-          required: ["message", "conversation_complete", "current_step"],
+          required: ["message", "conversation_complete", "current_step", "fluxo"],
           additionalProperties: false
         }
       }
@@ -254,6 +283,7 @@ async function getIntakeReply({
     text: parsed.message,
     isComplete: parsed.conversation_complete,
     currentStep: parsed.current_step,
+    fluxo: parsed.fluxo,
     raw: response
   };
 }
@@ -293,11 +323,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.log('prompt', prompt);
     console.log('reply', reply);
 
-    await sendMessageToChatwoot(process.env.CW_ACCOUNT_ID!, result.conversationId, reply.text);
-
     if (reply.isComplete) {
       await completeConversationAndNotifyDoctor(req.body as WebhookPayload);
     }
+
+    await sendMessageToChatwoot(process.env.CW_ACCOUNT_ID!, result.conversationId, reply.text);
 
     return res.status(200).json({ ok: true, conversationId: result.conversationId, reply });
   } catch (error) {
@@ -326,8 +356,8 @@ async function notifyDoctorAboutFinishedConversation(message: WebhookPayload) {
   const senderPhone = message?.sender?.phone_number;
 
   const doctors = [
+    4,   // gabriel
     32, // dayman
-    4   // gabriel
   ];
 
   for (const doctorId of doctors) {
